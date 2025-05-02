@@ -1,0 +1,27 @@
+# Dependencies
+/vendor/
+
+# Environment
+.env
+.env.*.local
+
+# Composer installer (якщо використовував composer.phar локально)
+composer.phar
+
+# IDE/Editor
+/.idea/
+/.vscode/
+/nbproject/
+
+# OS-залишки
+.DS_Store
+Thumbs.db
+
+# Логи та тимчасові файли
+*.log
+*.tmp
+
+# Системні файли
+Thumbs.db
+ehthumbs.db
+Desktop.ini
