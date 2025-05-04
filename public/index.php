@@ -13,10 +13,13 @@ Database::getInstance();
 
 // Маршрути
 $router = new Router();
-$router->get('/',             'App\Controllers\LessonController@index');
-$router->get('/lesson',       'App\Controllers\LessonController@show');
-$router->post('/lesson/start','App\Controllers\LessonController@start');
-$router->get('/stats',        'App\Controllers\StatsController@index');
+$router->get('/',             'App\Controllers\PageController@home');
+$router->get('/lessons',       'App\Controllers\PageController@lessons');
+$router->post('/lessons/start','App\Controllers\PageController@startLesson');
+
+$router->get('/stats',        'App\Controllers\PageController@stats');
+$router->post('/stats/create', 'App\Controllers\StatsController@create');
+
 $router->post('/user/register','App\Controllers\UserController@register');
 $router->post('/user/login',   'App\Controllers\UserController@login');
 $router->dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);

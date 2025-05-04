@@ -1,16 +1,26 @@
-<h2>Твоя статистика</h2>
+<h2>Ваша статистика</h2>
 <table>
-  <thead>
-    <tr><th>Урок</th><th>WPM</th><th>Точність</th><th>Дата</th></tr>
-  </thead>
-  <tbody>
-    <?php foreach($data as $row): ?>
-      <tr>
-        <td><?=$row['title']?></td>
-        <td><?=$row['wpm']?></td>
-        <td><?=$row['accuracy']?>%</td>
-        <td><?=$row['created_at']?></td>
-      </tr>
-    <?php endforeach; ?>
-  </tbody>
+  <tr><th>Урок</th><th>WPM</th><th>Точність</th><th>Дата</th></tr>
+  <?php foreach($userStats as $r): ?>
+  <tr>
+    <td><?=$r['title']?></td>
+    <td><?=$r['wpm']?></td>
+    <td><?=$r['accuracy']?>%</td>
+    <td><?=$r['created_at']?></td>
+  </tr>
+  <?php endforeach; ?>
+</table>
+
+<h2>Статистика всіх користувачів</h2>
+<table>
+  <tr><th>Користувач</th><th>Урок</th><th>WPM</th><th>Точність</th><th>Дата</th></tr>
+  <?php foreach($allStats as $r): ?>
+  <tr>
+    <td><?=$r['username']?></td>
+    <td><?=$r['title']?></td>
+    <td><?=$r['wpm']?></td>
+    <td><?=$r['accuracy']?>%</td>
+    <td><?=$r['created_at']?></td>
+  </tr>
+  <?php endforeach; ?>
 </table>

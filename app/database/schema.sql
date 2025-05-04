@@ -14,6 +14,12 @@ CREATE TABLE IF NOT EXISTS `lessons` (
   `content` TEXT NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Декілька прикладних записів
+INSERT INTO `lessons` (`title`,`content`) VALUES
+  ('Урок 1: Базові символи','asdf jkl; asdf jkl;'),
+  ('Урок 2: Розширені символи',';lkj fdsa ;lkj fdsa');
+
+
 CREATE TABLE IF NOT EXISTS `stats` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
   `user_id` INT NOT NULL,
