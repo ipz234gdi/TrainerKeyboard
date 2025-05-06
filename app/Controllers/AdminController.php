@@ -32,6 +32,7 @@ class AdminController extends BaseController
         $data = [
             'title' => trim($_POST['title'] ?? ''),
             'content' => trim($_POST['content'] ?? ''),
+            'lang' => ($_POST['lang'] === 'en' ? 'en' : 'ua'),
             'category_id' => (int) ($_POST['category_id'] ?? 0),
             'tags' => trim($_POST['tags'] ?? '')
         ];
@@ -56,6 +57,7 @@ class AdminController extends BaseController
         $data = [
             'title' => trim($_POST['title'] ?? ''),
             'content' => trim($_POST['content'] ?? ''),
+            'lang' => ($_POST['lang'] === 'en' ? 'en' : 'ua'),
             'category_id' => (int) ($_POST['category_id'] ?? 0),
             'tags' => trim($_POST['tags'] ?? '')
         ];
