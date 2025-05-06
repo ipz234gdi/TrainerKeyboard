@@ -30,12 +30,6 @@
         </div>
     </div>
     <div class="settings">
-        <div class="language-picker">
-            <select id="language-select">
-                <option value="ua">Українська</option>
-                <option value="en">English</option>
-            </select>
-        </div>
         <div class="difficulty-picker">
             <label for="difficulty">Складність:</label>
             <select id="difficulty">
@@ -235,8 +229,6 @@
         const display = document.getElementById('text-display');
         const keyboard = document.getElementById('keyboard');
         const resetBtn = document.getElementById('reset-btn');
-        const langSelect = document.getElementById('language-select');
-        const diffSelect = document.getElementById('difficulty');
         const showKbCheck = document.getElementById('show-keyboard');
 
         const wpmEl = document.getElementById('wpm');
@@ -244,42 +236,54 @@
         const timeEl = document.getElementById('time');
 
 
-        // Збірка клавіш
+        // Зібрали мапу клавіш
         const keys = {};
         document.querySelectorAll('#keyboard span').forEach(el => {
             keys[el.dataset.key] = el;
         });
 
-        // Змінні стану
         let pos = 0, correct = 0, total = 0, startTime = null, timer = null;
+        const levelSelect = document.getElementById('difficulty');
 
-        function clearKeyHighlights() {
-            Object.values(keys).forEach(k => {
-                k.classList.remove('active', 'wrong', 'next');
-            });
+        function clearNextHighlights() {
+            document.querySelectorAll('#keyboard span.next')
+                .forEach(el => el.classList.remove('next'));
+        }
+        function clearPressHighlights() {
+            document.querySelectorAll('#keyboard span.active, #keyboard span.wrong')
+                .forEach(el => el.classList.remove('active', 'wrong'));
+        }
+        function resetHighlights() {
+            clearNextHighlights();
+            clearPressHighlights();
         }
 
-        // Підсвічуємо наступну клавішу синім (рівень 1)
+        // Підсвічування наступної клавіші (рівень 1)
         function highlightNextKey() {
-            if (diffSelect.value === '1') {
-                const next = lessonText[pos];
-                // знаходимо код клавіші за значенням символу:
-                for (let code in keys) {
-                    if (keys[code].textContent === next) {
-                        keys[code].classList.add('next');
-                    }
+            const ch = lessonText[pos];
+
+            if (!ch) return;
+            // шукаємо незалежно від регістру
+            for (let code in keys) {
+                if (keys[code].textContent.toLowerCase() === ch.toLowerCase()) {
+                    keys[code].classList.add('next');
+                    
+                    break;
                 }
             }
         }
 
         // Рендер тексту згідно складності
         function renderText() {
-            const level = diffSelect.value;
-            let html = '';
+            const level = levelSelect.value;
 
             if (level === '3') {
-                display.innerHTML = '';
+                display.innerHTML = lessonText[pos]
+                    ? `<span class="current">${lessonText[pos]}</span>`
+                    : '';
             } else {
+                // повний текст із відмітками
+                let html = '';
                 for (let i = 0; i < lessonText.length; i++) {
                     const ch = lessonText[i];
                     if (i < pos) html += `<span class="correct">${ch}</span>`;
@@ -289,15 +293,10 @@
                 display.innerHTML = html;
             }
 
-            if (level === '3') {
-                input.placeholder = lessonText[pos] || 'Урок завершено!';
-                input.value = '';
-            } else {
-                input.placeholder = '';
+            // оновлюємо клавіатуру
+            if (level === '1') {
+                highlightNextKey();
             }
-
-            clearKeyHighlights();
-            highlightNextKey();
         }
 
         // Почати таймер
@@ -321,33 +320,31 @@
 
         // Обробник натискання клавіш
         input.addEventListener('keydown', e => {
-            const level = diffSelect.value;
-
+            const level = levelSelect.value;
+            resetHighlights();
             if (!startTime && e.key.length === 1) startTimer();
 
-            // Backspace
+            // Обробка Backspace
             if (e.key === 'Backspace') {
                 e.preventDefault();
                 if (pos > 0) pos--;
-                clearKeyHighlights();
-                if (keys['Backspace']) keys['Backspace'].classList.add('active');
+                // для рівнів 2 і 3 прибираємо попередню pressed-підсвітку
+                if (level === '2' || level === '3') clearPressHighlights();
                 renderText();
                 return;
             }
-
             if (e.key.length !== 1) return;
             e.preventDefault();
 
             const expected = lessonText[pos];
             total++;
-            clearKeyHighlights(); // почистили підсвічення від попередніх натискань
 
-            // якщо правильний
+            // додаємо active/wrong для всіх рівнів
             if (e.key === expected) {
                 pos++; correct++;
-                if (keys[e.code]) keys[e.code].classList.add('active');
+                keys[e.code]?.classList.add('active');
             } else {
-                if (keys[e.code]) keys[e.code].classList.add('wrong');
+                keys[e.code]?.classList.add('wrong');
             }
 
             renderText();
@@ -375,36 +372,33 @@
 
 
 
-    // Кнопка “Почати спочатку”
-    resetBtn.addEventListener('click', () => {
-        clearInterval(timer);
-        pos = correct = total = 0;
-        startTime = null;
-        wpmEl.textContent = '0 зн/хв';
-        accEl.textContent = '100%';
-        timeEl.textContent = '0:00';
+        // Кнопка “Почати спочатку”
+        resetBtn.addEventListener('click', () => {
+            clearInterval(timer);
+            pos = correct = total = 0;
+            startTime = null;
+            wpmEl.textContent = '0 зн/хв';
+            accEl.textContent = '100%';
+            timeEl.textContent = '0:00';
+            resetHighlights();
+            renderText();
+            input.focus();
+        });
+
+        // Зміна рівня складності
+        levelSelect.addEventListener('change', () => {
+            resetHighlights();
+            renderText();
+            input.focus();
+        });
+
+        // Показ/приховування клавіатури
+        showKbCheck.addEventListener('change', () => {
+            keyboard.style.opacity = showKbCheck.checked ? '1' : '0';
+        });
+
+        // Перший рендер і фокус
         renderText();
         input.focus();
-    });
-
-    // Зміна мови — просто перевантажити сторінку на /lessons
-    langSelect.addEventListener('change', () => {
-        // тут можна реалізувати ajax-перезавантаження тексту чи просто перезавантаження сторінки
-        location.reload();
-    });
-
-    // Зміна рівня складності
-    diffSelect.addEventListener('change', () => {
-        renderText();
-    });
-
-    // Показ/приховування клавіатури
-    showKbCheck.addEventListener('change', () => {
-        keyboard.style.opacity = showKbCheck.checked ? '1' : '0';
-    });
-
-    // Перший рендер і фокус
-    renderText();
-    input.focus();
     });
 </script>

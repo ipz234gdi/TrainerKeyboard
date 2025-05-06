@@ -7,7 +7,7 @@ use App\Models\Stats;
 class PageController extends BaseController
 {
     public function home(): void {
-        session_start();
+
         if (empty($_SESSION['user_id'])) {
             $this->redirect('/');
         }
@@ -27,7 +27,6 @@ class PageController extends BaseController
 
     public function lessons(): void
     {
-        session_start();
         if (empty($_SESSION['user_id'])) {
             $this->redirect('/');
         }
@@ -36,7 +35,6 @@ class PageController extends BaseController
     }
 
     public function startLesson(): void {
-        session_start();
         if (empty($_SESSION['user_id'])) {
             $this->redirect('/');
         }
@@ -51,7 +49,6 @@ class PageController extends BaseController
 
     public function stats(): void
     {
-        session_start();
         if (empty($_SESSION['user_id'])) {
             $this->redirect('/');
         }
