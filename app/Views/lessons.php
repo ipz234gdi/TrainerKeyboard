@@ -30,8 +30,8 @@
     <?php foreach($lessons as $l): 
       $id      = (int)$l['id'];
       $done    = in_array($id, $completed, true);
-      $title   = htmlspecialchars($l['title']);
-      $preview = htmlspecialchars(mb_substr($l['content'],0,100)).'…';
+      $title   = htmlspecialchars($l['title'] ?? '');
+      $preview = htmlspecialchars(mb_substr($l['content'],0,100) ?? '') ?? ''.'…';
     ?>
     <tr>
       <td><?= $id ?></td>
@@ -48,3 +48,48 @@
     <?php endforeach; ?>
   </table>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const input = document.getElementById('lesson-search');
+  const resultsDiv = document.getElementById('search-results');
+  const list = document.getElementById('results-list');
+  const allLessons = document.getElementById('all-lessons');
+  let timeout;
+
+  input.addEventListener('input', () => {
+    clearTimeout(timeout);
+    const q = input.value.trim();
+    timeout = setTimeout(() => {
+      if (q === '') {
+        resultsDiv.style.display = 'none';
+        allLessons.style.display = '';
+        return;
+      }
+      fetch(`/api/lessons?query=${encodeURIComponent(q)}`)
+        .then(res => res.json())
+        .then(data => {
+          list.innerHTML = '';
+          if (data.length === 0) {
+            list.innerHTML = '<li>Нічого не знайдено</li>';
+          } else {
+            data.forEach(item => {
+              const li = document.createElement('li');
+              li.innerHTML = `
+                <strong>${item.id}. ${item.title}</strong>
+                <p>${item.preview}</p>
+                <form method="get" action="/lesson/show" style="display:inline">
+                  <input type="hidden" name="id" value="${item.id}">
+                  <button type="submit">Preview</button>
+                </form>
+              `;
+              list.appendChild(li);
+            });
+          }
+          allLessons.style.display = 'none';
+          resultsDiv.style.display = '';
+        })
+        .catch(console.error);
+    }, 300);
+  });
+});
+</script>
