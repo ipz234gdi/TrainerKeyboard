@@ -26,7 +26,7 @@ $router->get('/logout',          'App\Controllers\AuthController@logout');
 $router->get('/lessons',       'App\Controllers\PageController@lessons');
 $router->post('/lessons/start','App\Controllers\PageController@startLesson');
 
-$router->get('/stats',        'App\Controllers\PageController@stats');
+$router->get('/stats', 'App\Controllers\StatsController@index');
 $router->post('/stats/create', 'App\Controllers\StatsController@create');
 
 $router->get('/admin/lessons',        'App\Controllers\AdminController@lessonsIndex');
