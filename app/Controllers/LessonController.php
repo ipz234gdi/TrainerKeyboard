@@ -33,26 +33,6 @@ class LessonController extends BaseController
     ]);
   }
 
-  public function show(): void
-  {
-    if (session_status() === PHP_SESSION_NONE)
-      session_start();
-    if (empty($_SESSION['user_id']))
-      $this->redirect('/');
-
-    // отримуємо id із GET, якщо є
-    $id = (int) ($_GET['id'] ?? 0);
-    $lesson = $id
-      ? (new Lesson())->getById($id)
-      : null;
-    $lang = $_SESSION['lang'] ?? 'ua';
-
-    $this->view('lesson-preview', [
-      'lesson' => $lesson,
-      'lang' => $lang
-    ]);
-  }
-
   public function start(): void
   {
     if (session_status() === PHP_SESSION_NONE)
