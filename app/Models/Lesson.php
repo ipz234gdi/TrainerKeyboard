@@ -81,4 +81,23 @@ class Lesson
     $stmt = $this->db->prepare("DELETE FROM lessons WHERE id=?");
     return $stmt->execute([$id]);
   }
+
+  public function search(): void
+    {
+        header('Content-Type: application/json; charset=utf-8');
+        if (session_status()===PHP_SESSION_NONE) session_start();
+        if (empty($_SESSION['user_id'])) {
+            http_response_code(401);
+            echo json_encode(['error'=>'Unauthorized']);
+            return;
+        }
+
+        $q    = trim($_GET['query'] ?? '');
+        $lang = $_SESSION['lang'] ?? 'ua';
+        $lessons = $q !== ''
+            ? (new Lesson())->search($q, $lang)
+            : [];
+
+        echo json_encode($lessons);
+    }
 }
