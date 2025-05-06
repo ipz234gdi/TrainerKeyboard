@@ -23,8 +23,9 @@ $router->post('/register',       'App\Controllers\AuthController@register');
 $router->post('/login',          'App\Controllers\AuthController@login');
 $router->get('/logout',          'App\Controllers\AuthController@logout');
 
-$router->get('/lessons',       'App\Controllers\PageController@lessons');
-$router->post('/lessons/start','App\Controllers\PageController@startLesson');
+$router->get( '/lessons',      'App\Controllers\PageController@lessons');
+$router->get( '/lesson/show',  'App\Controllers\LessonController@show');
+$router->post('/lessons/start','App\Controllers\LessonController@start');
 
 $router->get('/stats', 'App\Controllers\StatsController@index');
 $router->post('/stats/create', 'App\Controllers\StatsController@create');

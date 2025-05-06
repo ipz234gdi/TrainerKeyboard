@@ -31,7 +31,7 @@ class PageController extends BaseController
         if (empty($_SESSION['user_id'])) {
             $this->redirect('/');
         }
-        
+
         $lang = $_GET['lang'] ?? ($_SESSION['lang'] ?? 'ua');
         $_SESSION['lang'] = in_array($lang, ['ua', 'en']) ? $lang : 'ua';
 
@@ -42,19 +42,19 @@ class PageController extends BaseController
         ]);
     }
 
-    public function startLesson(): void
-    {
-        if (empty($_SESSION['user_id'])) {
-            $this->redirect('/');
-        }
-        $lid = (int) ($_POST['lesson_id'] ?? 0);
-        // зберігаємо вибір у сесії
-        $_SESSION['current_lesson'] = $lid;
-        $lesson = $lid
-            ? (new Lesson())->getById($lid)
-            : ['id' => 0, 'title' => 'Тестова зона', 'content' => 'Набирайте будь-який текст...'];
-        $this->view('home', ['lesson' => $lesson]);
-    }
+    // public function startLesson(): void
+    // {
+    //     if (empty($_SESSION['user_id'])) {
+    //         $this->redirect('/');
+    //     }
+    //     $lid = (int) ($_POST['lesson_id'] ?? 0);
+    //     // зберігаємо вибір у сесії
+    //     $_SESSION['current_lesson'] = $lid;
+    //     $lesson = $lid
+    //         ? (new Lesson())->getById($lid)
+    //         : ['id' => 0, 'title' => 'Тестова зона', 'content' => 'Набирайте будь-який текст...'];
+    //     $this->view('home', ['lesson' => $lesson]);
+    // }
 
     public function stats(): void
     {

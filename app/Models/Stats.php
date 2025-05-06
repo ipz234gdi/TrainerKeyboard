@@ -11,6 +11,16 @@ class Stats
     $this->db = Database::getInstance();
   }
 
+  public function completedLessons(int $userId): array {
+    $stmt = $this->db->prepare(
+      "SELECT DISTINCT lesson_id
+       FROM stats
+       WHERE user_id = :uid"
+    );
+    $stmt->execute([':uid' => $userId]);
+    return array_column($stmt->fetchAll(PDO::FETCH_ASSOC), 'lesson_id');
+  }
+
   public function create(int $uid, int $lid, int $wpm, float $acc): bool
   {
     $s = $this->db->prepare(
