@@ -8,6 +8,9 @@ CREATE TABLE IF NOT EXISTS `users` (
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+ALTER TABLE users
+  ADD COLUMN role ENUM('student','teacher','administrator') NOT NULL DEFAULT 'student';
+
 CREATE TABLE IF NOT EXISTS `lessons` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
   `title` VARCHAR(100) NOT NULL,
