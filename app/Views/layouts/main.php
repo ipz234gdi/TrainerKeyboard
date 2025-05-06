@@ -10,9 +10,9 @@
 
 <body>
   <?php
-    if (session_status() === PHP_SESSION_NONE) {
-      session_start();
-    }
+  if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+  }
   ?>
   <nav>
     <a href="/">Головна</a>
@@ -23,7 +23,8 @@
       $userModel = new \App\Models\User();
       if ($userModel->isAdmin((int) $_SESSION['user_id'])):
         ?>
-        <a href="/admin/lessons">Admin Panel</a>
+        <a href="/admin/lessons">Управління уроками</a>
+        <a href="/admin/users">Управління користувачами</a>
       <?php endif; ?>
       <a href="/logout">Вихід</a>
     <?php endif; ?>
