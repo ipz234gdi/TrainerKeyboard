@@ -3,11 +3,16 @@ namespace App\Models;
 use App\Core\Database;
 use PDO;
 
-class Lesson {
+class Lesson
+{
   private PDO $db;
-  public function __construct(){ $this->db=Database::getInstance(); }
+  public function __construct()
+  {
+    $this->db = Database::getInstance();
+  }
 
-  public function all(): array {
+  public function all(): array
+  {
     return $this->db
       ->query("SELECT l.*, c.name AS category
                FROM lessons l
@@ -16,7 +21,8 @@ class Lesson {
       ->fetchAll();
   }
 
-  public function getById(int $id): ?array {
+  public function getById(int $id): ?array
+  {
     $stmt = $this->db->prepare(
       "SELECT l.*, c.name AS category
        FROM lessons l
@@ -27,35 +33,38 @@ class Lesson {
     return $stmt->fetch() ?: null;
   }
 
-  public function create(array $data): bool {
+  public function create(array $data): bool
+  {
     $stmt = $this->db->prepare(
       "INSERT INTO lessons(title, content, category_id, tags)
        VALUES(:title, :content, :cat, :tags)"
     );
     return $stmt->execute([
-      ':title'   => $data['title'],
+      ':title' => $data['title'],
       ':content' => $data['content'],
-      ':cat'     => $data['category_id'] ?: null,
-      ':tags'    => $data['tags'] ?? ''
+      ':cat' => $data['category_id'] ?: null,
+      ':tags' => $data['tags'] ?? ''
     ]);
   }
 
-  public function update(int $id, array $data): bool {
+  public function update(int $id, array $data): bool
+  {
     $stmt = $this->db->prepare(
       "UPDATE lessons
        SET title=:title, content=:content, category_id=:cat, tags=:tags
        WHERE id=:id"
     );
     return $stmt->execute([
-      ':title'   => $data['title'],
+      ':title' => $data['title'],
       ':content' => $data['content'],
-      ':cat'     => $data['category_id'] ?: null,
-      ':tags'    => $data['tags'] ?? '',
-      ':id'      => $id
+      ':cat' => $data['category_id'] ?: null,
+      ':tags' => $data['tags'] ?? '',
+      ':id' => $id
     ]);
   }
 
-  public function delete(int $id): bool {
+  public function delete(int $id): bool
+  {
     $stmt = $this->db->prepare("DELETE FROM lessons WHERE id=?");
     return $stmt->execute([$id]);
   }

@@ -263,11 +263,19 @@
             const ch = lessonText[pos];
 
             if (!ch) return;
+
+            // якщо це пробіл
+            if (ch === ' ') {
+                // тут — data-key="Space"
+                keys['Space']?.classList.add('next');
+                return;
+            }
+
             // шукаємо незалежно від регістру
             for (let code in keys) {
                 if (keys[code].textContent.toLowerCase() === ch.toLowerCase()) {
                     keys[code].classList.add('next');
-                    
+
                     break;
                 }
             }

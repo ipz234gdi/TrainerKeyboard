@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 ALTER TABLE users
   ADD COLUMN role ENUM('student','teacher','administrator') NOT NULL DEFAULT 'student';
+  ADD COLUMN blocked TINYINT(1) NOT NULL DEFAULT 0;
 
 CREATE TABLE IF NOT EXISTS `lessons` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
