@@ -9,19 +9,54 @@ class Lesson {
 
   public function all(): array {
     return $this->db
-      ->query("SELECT * FROM lessons ORDER BY id")
+      ->query("SELECT l.*, c.name AS category
+               FROM lessons l
+               LEFT JOIN categories c ON l.category_id=c.id
+               ORDER BY l.id")
       ->fetchAll();
   }
 
-  public function getById(int $id): array {
-    $stmt = $this->db->prepare("SELECT * FROM lessons WHERE id=?");
+  public function getById(int $id): ?array {
+    $stmt = $this->db->prepare(
+      "SELECT l.*, c.name AS category
+       FROM lessons l
+       LEFT JOIN categories c ON l.category_id=c.id
+       WHERE l.id=?"
+    );
     $stmt->execute([$id]);
-    return $stmt->fetch();
+    return $stmt->fetch() ?: null;
   }
 
-  public function getByOrder(int $offset): array {
-    $stmt = $this->db->prepare("SELECT * FROM lessons ORDER BY id LIMIT 1 OFFSET ?");
-    $stmt->execute([$offset]);
-    return $stmt->fetch();
+  public function create(array $data): bool {
+    $stmt = $this->db->prepare(
+      "INSERT INTO lessons(title, content, category_id, tags)
+       VALUES(:title, :content, :cat, :tags)"
+    );
+    return $stmt->execute([
+      ':title'   => $data['title'],
+      ':content' => $data['content'],
+      ':cat'     => $data['category_id'] ?: null,
+      ':tags'    => $data['tags'] ?? ''
+    ]);
+  }
+
+  public function update(int $id, array $data): bool {
+    $stmt = $this->db->prepare(
+      "UPDATE lessons
+       SET title=:title, content=:content, category_id=:cat, tags=:tags
+       WHERE id=:id"
+    );
+    return $stmt->execute([
+      ':title'   => $data['title'],
+      ':content' => $data['content'],
+      ':cat'     => $data['category_id'] ?: null,
+      ':tags'    => $data['tags'] ?? '',
+      ':id'      => $id
+    ]);
+  }
+
+  public function delete(int $id): bool {
+    $stmt = $this->db->prepare("DELETE FROM lessons WHERE id=?");
+    return $stmt->execute([$id]);
   }
 }
