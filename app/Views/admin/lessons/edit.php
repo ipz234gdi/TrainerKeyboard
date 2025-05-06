@@ -3,6 +3,12 @@
     <input type="hidden" name="id" value="<?= $lesson['id'] ?>">
     <label>Title:<input name="title" value="<?= htmlspecialchars($lesson['title']) ?>"></label><br>
     <label>Content:<textarea name="content"><?= htmlspecialchars($lesson['content']) ?></textarea></label><br>
+    <label>Language:
+      <select name="lang">
+        <option value="ua" <?= $lesson['lang'] === 'ua' ? 'selected' : '' ?>>Українська</option>
+        <option value="en" <?= $lesson['lang'] === 'en' ? 'selected' : '' ?>>English</option>
+      </select>
+    </label><br>
     <label>Category:
         <select name="category_id">
             <option value="0">— без категорії —</option>
@@ -13,6 +19,6 @@
             <?php endforeach; ?>
         </select>
     </label><br>
-    <input name="tags" value="<?= htmlspecialchars($lesson['tags'] ?? '') ?>"><br>
+    <label>Tags (csv):<input name="tags" value="<?= htmlspecialchars($lesson['tags'] ?? '') ?>"></label><br>
     <button type="submit">Update</button>
 </form>

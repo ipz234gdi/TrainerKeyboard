@@ -3,6 +3,7 @@
 <table>
     <tr>
         <th>ID</th>
+        <th>Мова</th>
         <th>Заголовок</th>
         <th>Категорія</th>
         <th>Теги</th>
@@ -11,6 +12,7 @@
     <?php foreach ($lessons as $l): ?>
         <tr>
             <td><?= $l['id'] ?></td>
+            <td><?= htmlspecialchars(strtoupper($l['lang'])) ?></td>
             <td><?= htmlspecialchars($l['title']) ?></td>
             <td><?= htmlspecialchars($l['category'] ?? '-') ?></td>
             <td><?= htmlspecialchars($l['tags'] ?? '-') ?></td>

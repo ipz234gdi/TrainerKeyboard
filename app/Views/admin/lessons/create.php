@@ -2,6 +2,12 @@
 <form method="post" action="/admin/lessons/store">
     <label>Title:<input name="title"></label><br>
     <label>Content:<textarea name="content"></textarea></label><br>
+    <label>Language:
+      <select name="lang">
+        <option value="ua">Українська</option>
+        <option value="en">English</option>
+      </select>
+    </label><br>
     <label>Category:
         <select name="category_id">
             <option value="0">— без категорії —</option>

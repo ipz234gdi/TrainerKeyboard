@@ -49,12 +49,13 @@ class Lesson
   public function create(array $data): bool
   {
     $stmt = $this->db->prepare(
-      "INSERT INTO lessons(title, content, category_id, tags)
-       VALUES(:title, :content, :cat, :tags)"
+      "INSERT INTO lessons(title, content, lang, category_id, tags)
+       VALUES(:title, :content, :lang, :cat, :tags)"
     );
     return $stmt->execute([
       ':title' => $data['title'],
       ':content' => $data['content'],
+      ':lang' => $data['lang'],
       ':cat' => $data['category_id'] ?: null,
       ':tags' => $data['tags'] ?? ''
     ]);
@@ -64,12 +65,13 @@ class Lesson
   {
     $stmt = $this->db->prepare(
       "UPDATE lessons
-       SET title=:title, content=:content, category_id=:cat, tags=:tags
+       SET title=:title, content=:content, lang=:lang, category_id=:cat, tags=:tags
        WHERE id=:id"
     );
     return $stmt->execute([
       ':title' => $data['title'],
       ':content' => $data['content'],
+      ':lang' => $data['lang'],
       ':cat' => $data['category_id'] ?: null,
       ':tags' => $data['tags'] ?? '',
       ':id' => $id
