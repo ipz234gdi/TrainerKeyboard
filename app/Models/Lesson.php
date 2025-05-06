@@ -84,22 +84,15 @@ class Lesson
     return $stmt->execute([$id]);
   }
 
-  public function search(): void
-    {
-        header('Content-Type: application/json; charset=utf-8');
-        if (session_status()===PHP_SESSION_NONE) session_start();
-        if (empty($_SESSION['user_id'])) {
-            http_response_code(401);
-            echo json_encode(['error'=>'Unauthorized']);
-            return;
-        }
-
-        $q    = trim($_GET['query'] ?? '');
-        $lang = $_SESSION['lang'] ?? 'ua';
-        $lessons = $q !== ''
-            ? (new Lesson())->search($q, $lang)
-            : [];
-
-        echo json_encode($lessons);
-    }
+  public function search(string $q, string $lang): array
+  {
+    $sql = "SELECT id, title, LEFT(content,200) AS preview, lang
+            FROM lessons
+            WHERE lang = :lang
+              AND (title LIKE :q OR content LIKE :q)
+            ORDER BY id";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([':lang' => $lang, ':q' => "%{$q}%"]);
+    return $stmt->fetchAll();
+  }
 }

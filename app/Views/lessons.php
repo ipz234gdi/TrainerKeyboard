@@ -39,7 +39,7 @@
       <td><?= nl2br($preview) ?></td>
       <td style="text-align:center"><?= $done?'✔':'–' ?></td>
       <td>
-        <form method="get" action="/lesson/show">
+        <form method="post" action="/lessons/start">
           <input type="hidden" name="id" value="<?= $id ?>">
           <button type="submit">Preview</button>
         </form>
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         allLessons.style.display = '';
         return;
       }
-      fetch(`/api/lessons?query=${encodeURIComponent(q)}`)
+      fetch(`/lessons/search?query=${encodeURIComponent(q)}`)
         .then(res => res.json())
         .then(data => {
           list.innerHTML = '';
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
               li.innerHTML = `
                 <strong>${item.id}. ${item.title}</strong>
                 <p>${item.preview}</p>
-                <form method="get" action="/lesson/show" style="display:inline">
+                <form method="post" action="/lessons/start" style="display:inline">
                   <input type="hidden" name="id" value="${item.id}">
                   <button type="submit">Preview</button>
                 </form>
