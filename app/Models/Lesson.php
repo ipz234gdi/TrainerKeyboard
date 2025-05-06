@@ -11,6 +11,19 @@ class Lesson
     $this->db = Database::getInstance();
   }
 
+  public function allByLang(string $lang): array
+  {
+    $stmt = $this->db->prepare(
+      "SELECT l.*, c.name AS category
+       FROM lessons l
+       LEFT JOIN categories c ON l.category_id=c.id
+       WHERE l.lang = :lang
+       ORDER BY l.id"
+    );
+    $stmt->execute([':lang' => $lang]);
+    return $stmt->fetchAll();
+  }
+
   public function all(): array
   {
     return $this->db
