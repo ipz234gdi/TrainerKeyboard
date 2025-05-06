@@ -36,4 +36,8 @@ $router->get('/admin/lessons/edit',   'App\Controllers\AdminController@lessonsEd
 $router->post('/admin/lessons/update','App\Controllers\AdminController@lessonsUpdate');
 $router->post('/admin/lessons/delete','App\Controllers\AdminController@lessonsDestroy');
 
+$router->get(  '/admin/users',             'App\Controllers\AdminController@usersIndex');
+$router->post('/admin/users/update-role', 'App\Controllers\AdminController@usersUpdateRole');
+$router->post('/admin/users/toggle-block','App\Controllers\AdminController@usersToggleBlock');
+
 $router->dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);
