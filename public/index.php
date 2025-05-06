@@ -29,4 +29,11 @@ $router->post('/lessons/start','App\Controllers\PageController@startLesson');
 $router->get('/stats',        'App\Controllers\PageController@stats');
 $router->post('/stats/create', 'App\Controllers\StatsController@create');
 
+$router->get('/admin/lessons',        'App\Controllers\AdminController@lessonsIndex');
+$router->get('/admin/lessons/create', 'App\Controllers\AdminController@lessonsCreateForm');
+$router->post('/admin/lessons/store', 'App\Controllers\AdminController@lessonsStore');
+$router->get('/admin/lessons/edit',   'App\Controllers\AdminController@lessonsEditForm');
+$router->post('/admin/lessons/update','App\Controllers\AdminController@lessonsUpdate');
+$router->post('/admin/lessons/delete','App\Controllers\AdminController@lessonsDestroy');
+
 $router->dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);
