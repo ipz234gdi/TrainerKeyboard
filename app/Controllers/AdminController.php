@@ -3,6 +3,7 @@ namespace App\Controllers;
 use App\Core\BaseController;
 use App\Models\Lesson;
 use App\Models\Category;
+use App\Models\User;
 
 class AdminController extends BaseController
 {
@@ -11,6 +12,7 @@ class AdminController extends BaseController
         $this->ensureAdmin(); // всі методи цього контролера — лише для адміна
     }
 
+    // LESSONS
     public function lessonsIndex(): void
     {
         $lessons = (new Lesson())->all();
@@ -68,5 +70,28 @@ class AdminController extends BaseController
         $id = (int) ($_POST['id'] ?? 0);
         (new Lesson())->delete($id);
         $this->redirect('/admin/lessons');
+    }
+
+    // USERS
+    public function usersIndex(): void
+    {
+        $users = (new User())->all();
+        $this->view('admin/users/index', ['users' => $users]);
+    }
+
+    public function usersUpdateRole(): void
+    {
+        $id = (int) ($_POST['id'] ?? 0);
+        $role = $_POST['role'] ?? 'student';
+        (new User())->updateRole($id, $role);
+        $this->redirect('/admin/users');
+    }
+    
+    public function usersToggleBlock(): void
+    {
+        $id = (int) ($_POST['id'] ?? 0);
+        $current = (int) ($_POST['blocked'] ?? 0);
+        (new User())->setBlocked($id, !$current);
+        $this->redirect('/admin/users');
     }
 }
