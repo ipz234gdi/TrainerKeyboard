@@ -43,4 +43,59 @@ class Stats
     );
     return $s->fetchAll();
   }
+
+  public function forUserFiltered(int $uid, ?string $from, ?string $to, int $lessonId): array
+  {
+    $sql = "SELECT s.*, l.title 
+            FROM stats s
+            JOIN lessons l ON l.id=s.lesson_id
+            WHERE s.user_id = :uid";
+    $params = [':uid' => $uid];
+
+    if ($lessonId) {
+      $sql .= " AND s.lesson_id = :lid";
+      $params[':lid'] = $lessonId;
+    }
+    if ($from) {
+      $sql .= " AND s.created_at >= :from";
+      $params[':from'] = $from . ' 00:00:00';
+    }
+    if ($to) {
+      $sql .= " AND s.created_at <= :to";
+      $params[':to'] = $to . ' 23:59:59';
+    }
+    $sql .= " ORDER BY s.created_at ASC";
+
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute($params);
+    return $stmt->fetchAll();
+  }
+
+  public function allUsersStatsFiltered(?string $from, ?string $to, int $lessonId): array
+  {
+    $sql = "SELECT u.username, l.title, s.wpm, s.accuracy, s.created_at
+            FROM stats s
+            JOIN users u   ON u.id = s.user_id
+            JOIN lessons l ON l.id = s.lesson_id
+            WHERE 1=1";
+    $params = [];
+
+    if ($lessonId) {
+      $sql .= " AND s.lesson_id = :lid";
+      $params[':lid'] = $lessonId;
+    }
+    if ($from) {
+      $sql .= " AND s.created_at >= :from";
+      $params[':from'] = $from . ' 00:00:00';
+    }
+    if ($to) {
+      $sql .= " AND s.created_at <= :to";
+      $params[':to'] = $to . ' 23:59:59';
+    }
+    $sql .= " ORDER BY s.created_at DESC";
+
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute($params);
+    return $stmt->fetchAll();
+  }
 }
