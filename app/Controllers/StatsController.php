@@ -61,11 +61,11 @@ class StatsController extends BaseController
     $ok = (new Stats())->create($_SESSION['user_id'], $lessonId, $wpm, $accuracy);
 
     // Якщо статистика збережена успішно, оновлюємо рейтинг і складність
-    if ($ok) {
-      // Оновлюємо рейтинг і складність уроку
-      (new Lesson())->updateLessonRating($lessonId);
-      (new Lesson())->updateLessonDifficulty($lessonId);
-    }
+    // if ($ok) {
+    //   // Оновлюємо рейтинг і складність уроку
+    //   (new Lesson())->updateLessonRating($lessonId);
+    //   (new Lesson())->updateLessonDifficulty($lessonId);
+    // }
     echo json_encode(['success' => $ok]);
   }
 }

@@ -51,7 +51,7 @@ class Stats
          WHERE s.user_id = :user_id"
     );
     $stmt->execute([':user_id' => $userId]);
-    return $stmt->fetchAll(); // Повертає всі записи з цієї статистики для користувача
+    return $stmt->fetchAll();
   }
 
   // Додавання методу для обчислення середніх статистик
@@ -63,8 +63,22 @@ class Stats
          WHERE user_id = :user_id"
     );
     $stmt->execute([':user_id' => $userId]);
-    return $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Логування результату запиту
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Логування в консоль
+    // echo "<script>console.log('SQL Query executed for user_id: $userId. Result: " . json_encode($result) . "');</script>";
+
+
+    if ($result['avg_wpm'] === null || $result['avg_accuracy'] === null) {
+      // echo "<script>console.log('No stats found for user_id: $userId.');</script>";
+      return ['average_wpm' => 0, 'average_accuracy' => 0];
+    }
+
+    return $result;
   }
+
 
   // Метод для отримання статистики по всіх користувачах
   public function allUsersStats(): array

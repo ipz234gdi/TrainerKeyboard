@@ -31,10 +31,11 @@
 
     <h3>Загальний бал:</h3>
     <p>Середня швидкість:
-        <?= isset($averageStats['average_wpm']) ? round($averageStats['average_wpm'], 2) : 'N/A' ?> зн/хв
+        <?= isset($averageStats['avg_wpm']) && $averageStats['avg_wpm'] !== null ? round($averageStats['avg_wpm'], 2) : 'N/A' ?>
+        зн/хв
     </p>
     <p>Середня точність:
-        <?= isset($averageStats['average_accuracy']) ? round($averageStats['average_accuracy'], 2) : 'N/A' ?>%
+        <?= isset($averageStats['avg_accuracy']) && $averageStats['avg_accuracy'] !== null ? round($averageStats['avg_accuracy'], 2) : 'N/A' ?>%
     </p>
 
 

@@ -87,7 +87,7 @@ class Lesson
       ':tags' => $data['tags'] ?? '',
       ':difficulty' => $data['difficulty'],
       ':rating' => $data['rating'],
-      ':id' => $data['id'] // Передаємо ID для оновлення
+      ':id' => $data['id']
     ]);
   }
 
@@ -113,28 +113,28 @@ class Lesson
 
   public function updateLessonRating(int $lessonId): void
   {
-    // Отримуємо кількість користувачів, що оцінили урок
+    // Отримуємо кількість користувачів, що оцінили урок (кількість записів для уроку в таблиці stats)
     $stmt = $this->db->prepare(
-      "SELECT COUNT(*) FROM lesson_user_stats WHERE lesson_id = :lesson_id"
+      "SELECT COUNT(DISTINCT user_id) FROM stats WHERE lesson_id = :lesson_id"
     );
     $stmt->execute([':lesson_id' => $lessonId]);
     $userCount = $stmt->fetchColumn();
 
     // Якщо користувачі вже є, обчислюємо середній рейтинг
     if ($userCount > 0) {
+      // Використовуємо таблицю stats для обчислення середнього рейтингу
       $stmt = $this->db->prepare(
-        "SELECT AVG(rating) FROM lesson_user_stats WHERE lesson_id = :lesson_id"
+        "SELECT AVG(wpm) AS average_rating FROM stats WHERE lesson_id = :lesson_id"
       );
       $stmt->execute([':lesson_id' => $lessonId]);
       $averageRating = $stmt->fetchColumn();
 
-      // Оновлюємо рейтинг уроку
+      // Оновлюємо рейтинг уроку в таблиці lessons
       $stmt = $this->db->prepare(
-        "UPDATE lessons SET rating = :rating, user_count = :user_count WHERE id = :lesson_id"
+        "UPDATE lessons SET rating = :rating WHERE id = :lesson_id"
       );
       $stmt->execute([
         ':rating' => $averageRating,
-        ':user_count' => $userCount,
         ':lesson_id' => $lessonId
       ]);
     }
@@ -142,9 +142,9 @@ class Lesson
 
   public function updateLessonDifficulty(int $lessonId): void
   {
-    // Отримуємо всі складності, оцінені користувачами для цього уроку
+    // Отримуємо всі складності, оцінені користувачами для цього уроку (таблиця stats)
     $stmt = $this->db->prepare(
-      "SELECT difficulty FROM lesson_user_stats WHERE lesson_id = :lesson_id"
+      "SELECT difficulty FROM stats WHERE lesson_id = :lesson_id"
     );
     $stmt->execute([':lesson_id' => $lessonId]);
 
@@ -154,12 +154,21 @@ class Lesson
       // Обчислюємо середню складність
       $averageDifficulty = array_sum($difficulties) / count($difficulties);
 
-      // Оновлюємо складність уроку
+      // Визначаємо відповідну складність (оскільки складність зберігається як ENUM)
+      if ($averageDifficulty <= 3) {
+        $difficulty = 'easy';
+      } elseif ($averageDifficulty <= 6) {
+        $difficulty = 'medium';
+      } else {
+        $difficulty = 'hard';
+      }
+
+      // Оновлюємо складність уроку в таблиці lessons
       $stmt = $this->db->prepare(
         "UPDATE lessons SET difficulty = :difficulty WHERE id = :lesson_id"
       );
       $stmt->execute([
-        ':difficulty' => $averageDifficulty,
+        ':difficulty' => $difficulty,
         ':lesson_id' => $lessonId
       ]);
     }

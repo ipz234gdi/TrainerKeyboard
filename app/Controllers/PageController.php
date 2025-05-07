@@ -52,6 +52,13 @@ class PageController extends BaseController
         $stats = new Stats();
         $completed = $stats->completedLessons((int) $_SESSION['user_id']);
 
+        // Оновлюємо рейтинг та складність для кожного уроку
+        foreach ($lessons as $lesson) {
+            // Оновлюємо рейтинг і складність для кожного уроку
+            (new Lesson())->updateLessonRating($lesson['id']);
+            (new Lesson())->updateLessonDifficulty($lesson['id']);
+        }
+
         // Для кожного уроку перевіряємо наявність "preview" та додаємо значення, якщо його немає
         foreach ($lessons as &$lesson) {
             // Якщо preview відсутній, формуємо його як частину контенту
