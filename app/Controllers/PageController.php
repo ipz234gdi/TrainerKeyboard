@@ -60,10 +60,14 @@ class PageController extends BaseController
         $lid = (int) ($_POST['lesson_id'] ?? 0);
         // зберігаємо вибір у сесії
         $_SESSION['current_lesson'] = $lid;
+        // var_dump($lid);
         $lesson = $lid
             ? (new Lesson())->getById($lid)
             : ['id' => 0, 'title' => 'Тестова зона', 'content' => 'Набирайте будь-який текст...'];
-        $this->view('home', ['lesson' => $lesson]);
+        
+        $lang = (new Lesson())->getLangById($lid) ?: 'ua';
+            
+        $this->view('home', ['lesson' => $lesson, 'lang' => $lang]);
     }
 
     public function stats(): void

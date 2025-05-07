@@ -6,21 +6,22 @@ use App\Core\BaseController;
 
 class BlindTestController extends BaseController
 {
-    public function index(): void
-    {
-        $this->view('blind-test');
-    }
-
     public function start(): void
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
+        if (empty($_SESSION['user_id'])) {
+            $this->redirect('/');
         }
-
-        $wpm = (int)($_POST['wpm'] ?? 0);
-        $accuracy = (float)($_POST['accuracy'] ?? 0);
-
-        // Переадресація на сторінку з результатами
-        $this->redirect('/stats');
+        // Статичні дані для уроку
+        $lesson = [
+            'id' => 1, 
+            'title' => 'Тестовий урок для сліпого друку',
+            'content' => 'Це статичний текст для уроку. Набирайте його без помилок.'
+        ];
+    
+        // Збереження уроку в сесії (якщо потрібно, для подальшої навігації або статистики)
+        $_SESSION['current_lesson'] = $lesson['id'];
+    
+        // Відправка даних на сторінку
+        $this->view('home', ['lesson' => $lesson], ['lang' => 'en']);
     }
 }

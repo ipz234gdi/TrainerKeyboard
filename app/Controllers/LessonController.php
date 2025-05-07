@@ -33,7 +33,7 @@ class LessonController extends BaseController
     ]);
   }
 
-  // public function start(): void
+  // public function startLesson(): void
   // {
   //   if (session_status() === PHP_SESSION_NONE)
   //     session_start();

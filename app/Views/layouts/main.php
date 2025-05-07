@@ -6,6 +6,7 @@
   <title>Blind Typing Trainer</title>
   <link rel="stylesheet" href="/assets/style.css">
   <link rel="stylesheet" href="/assets/lesson.css">
+  <link rel="stylesheet" href="/assets/home.css">
 </head>
 
 <body>
@@ -19,6 +20,7 @@
     <?php if (!empty($_SESSION['user_id'])): ?>
       <a href="/lessons">Уроки</a>
       <a href="/stats">Статистика</a>
+      <a href="/blind-test">Сліпий друк</a>
       <?php
       $userModel = new \App\Models\User();
       if ($userModel->isAdmin((int) $_SESSION['user_id'])):

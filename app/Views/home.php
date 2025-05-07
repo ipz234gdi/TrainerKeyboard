@@ -70,49 +70,82 @@
         <!-- Ряд 2 -->
         <div class="key-row">
             <span data-key="Tab" class="wide">Tab</span>
-            <span data-key="KeyQ">Q</span>
-            <span data-key="KeyW">W</span>
-            <span data-key="KeyE">E</span>
-            <span data-key="KeyR">R</span>
-            <span data-key="KeyT">T</span>
-            <span data-key="KeyY">Y</span>
-            <span data-key="KeyU">U</span>
-            <span data-key="KeyI">I</span>
-            <span data-key="KeyO">O</span>
-            <span data-key="KeyP">P</span>
-            <span data-key="BracketLeft">[</span>
-            <span data-key="BracketRight">]</span>
+            <span class="key" data-key="KeyQ" data-lang="en">Q</span>
+            <span class="key" data-key="KeyQ" data-lang="ua">Й</span>
+            <span class="key" data-key="KeyW" data-lang="en">W</span>
+            <span class="key" data-key="KeyW" data-lang="ua">Ц</span>
+            <span class="key" data-key="KeyE" data-lang="en">E</span>
+            <span class="key" data-key="KeyE" data-lang="ua">У</span>
+            <span class="key" data-key="KeyR" data-lang="en">R</span>
+            <span class="key" data-key="KeyR" data-lang="ua">К</span>
+            <span class="key" data-key="KeyT" data-lang="en">T</span>
+            <span class="key" data-key="KeyT" data-lang="ua">Е</span>
+            <span class="key" data-key="KeyY" data-lang="en">Y</span>
+            <span class="key" data-key="KeyY" data-lang="ua">Н</span>
+            <span class="key" data-key="KeyU" data-lang="en">U</span>
+            <span class="key" data-key="KeyU" data-lang="ua">Г</span>
+            <span class="key" data-key="KeyI" data-lang="en">I</span>
+            <span class="key" data-key="KeyI" data-lang="ua">Ш</span>
+            <span class="key" data-key="KeyO" data-lang="en">O</span>
+            <span class="key" data-key="KeyO" data-lang="ua">Щ</span>
+            <span class="key" data-key="KeyP" data-lang="en">P</span>
+            <span class="key" data-key="KeyO" data-lang="ua">З</span>
+            <span class="key" data-key="BracketLeft" data-lang="en">[</span>
+            <span class="key" data-key="BracketLeft" data-lang="ua">Х</span>
+            <span class="key" data-key="BracketRight" data-lang="en">]</span>
+            <span class="key" data-key="BracketRight" data-lang="ua">Ї</span>
             <span data-key="Backslash">\</span>
         </div>
         <!-- Ряд 3 -->
         <div class="key-row">
             <span data-key="CapsLock" class="wide">Caps</span>
-            <span data-key="KeyA">A</span>
-            <span data-key="KeyS">S</span>
-            <span data-key="KeyD">D</span>
-            <span data-key="KeyF">F</span>
-            <span data-key="KeyG">G</span>
-            <span data-key="KeyH">H</span>
-            <span data-key="KeyJ">J</span>
-            <span data-key="KeyK">K</span>
-            <span data-key="KeyL">L</span>
-            <span data-key="Semicolon">;</span>
-            <span data-key="Quote">'</span>
+            <span class="key" data-key="KeyA" data-lang="en">A</span>
+            <span class="key" data-key="KeyA" data-lang="ua">Ф</span>
+            <span class="key" data-key="KeyS" data-lang="en">S</span>
+            <span class="key" data-key="KeyS" data-lang="ua">І</span>
+            <span class="key" data-key="KeyD" data-lang="en">D</span>
+            <span class="key" data-key="KeyD" data-lang="ua">В</span>
+            <span class="key" data-key="KeyF" data-lang="en">F</span>
+            <span class="key" data-key="KeyF" data-lang="ua">А</span>
+            <span class="key" data-key="KeyG" data-lang="en">G</span>
+            <span class="key" data-key="KeyG" data-lang="ua">П</span>
+            <span class="key" data-key="KeyH" data-lang="en">H</span>
+            <span class="key" data-key="KeyH" data-lang="ua">Р</span>
+            <span class="key" data-key="KeyJ" data-lang="en">J</span>
+            <span class="key" data-key="KeyJ" data-lang="ua">О</span>
+            <span class="key" data-key="KeyK" data-lang="en">K</span>
+            <span class="key" data-key="KeyK" data-lang="ua">Л</span>
+            <span class="key" data-key="KeyL" data-lang="en">L</span>
+            <span class="key" data-key="KeyL" data-lang="ua">Д</span>
+            <span class="key" data-key="Semicolon" data-lang="en">;</span>
+            <span class="key" data-key="Semicolon" data-lang="ua">Ж</span>
+            <span class="key" data-key="Quote" data-lang="en">'</span>
+            <span class="key" data-key="Quote" data-lang="ua">Є</span>
             <span data-key="Enter" class="wide">Enter</span>
         </div>
         <!-- Ряд 4 -->
         <div class="key-row">
             <span data-key="ShiftLeft" class="extra-wide">Shift</span>
-            <span data-key="KeyZ">Z</span>
-            <span data-key="KeyX">X</span>
-            <span data-key="KeyC">C</span>
-            <span data-key="KeyV">V</span>
-            <span data-key="KeyB">B</span>
-            <span data-key="KeyN">N</span>
-            <span data-key="KeyM">M</span>
-            <span data-key="Comma">,</span>
-            <span data-key="Period">.</span>
-            <span data-key="Slash">/</span>
+            <span class="key" data-key="KeyZ" data-lang="en">Z</span>
+            <span class="key" data-key="KeyZ" data-lang="ua">Я</span>
+            <span class="key" data-key="KeyX" data-lang="en">X</span>
+            <span class="key" data-key="KeyX" data-lang="ua">Ч</span>
+            <span class="key" data-key="KeyC" data-lang="en">C</span>
+            <span class="key" data-key="KeyC" data-lang="ua">С</span>
+            <span class="key" data-key="KeyV" data-lang="en">V</span>
+            <span class="key" data-key="KeyV" data-lang="ua">М</span>
+            <span class="key" data-key="KeyB" data-lang="en">B</span>
+            <span class="key" data-key="KeyB" data-lang="ua">И</span>
+            <span class="key" data-key="KeyN" data-lang="en">N</span>
+            <span class="key" data-key="KeyN" data-lang="ua">Т</span>
+            <span class="key" data-key="KeyM" data-lang="en">M</span>
+            <span class="key" data-key="KeyM" data-lang="ua">Ь</span>
+            <span class="key" data-key="Comma" data-lang="en">,</span>
+            <span class="key" data-key="Comma" data-lang="ua">Б</span>
+            <span class="key" data-key="Period" data-lang="en">.</span>
+            <span class="key" data-key="Period" data-lang="ua">Ю</span>
+            <span class="key" data-key="Slash" data-lang="en">/</span>
+            <span class="key" data-key="Slash" data-lang="ua">. ,</span>
             <span data-key="ShiftRight" class="extra-wide">Shift</span>
         </div>
         <!-- Ряд 5 -->
@@ -133,94 +166,10 @@
     <p>© 2025 Тренажер сліпого друку</p>
 </footer>
 
-<style>
-    .card {
-        margin-bottom: 20px;
-        padding: 15px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-    }
-
-    .stats {
-        display: flex;
-        justify-content: space-around;
-        margin-bottom: 15px;
-    }
-
-    .stat-box h3 {
-        margin: 0 0 5px;
-        font-size: 1em;
-    }
-
-    .typing-area {
-        margin-bottom: 15px;
-    }
-
-    #text-display {
-        font-size: 1.2em;
-        margin-bottom: 10px;
-        white-space: pre-wrap;
-        word-wrap: break-word;
-    }
-
-    #input-area {
-        width: 100%;
-        padding: 8px;
-        font-size: 1em;
-        box-sizing: border-box;
-    }
-
-    #keyboard {
-        user-select: none;
-    }
-
-    .key-row {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 5px;
-    }
-
-    #keyboard span {
-        display: inline-block;
-        width: 40px;
-        height: 40px;
-        line-height: 40px;
-        text-align: center;
-        border: 1px solid #555;
-        margin: 0 2px;
-        border-radius: 4px;
-        background: #eee;
-        transition: background .1s;
-    }
-
-    #keyboard span.wide {
-        width: 60px;
-    }
-
-    #keyboard span.extra-wide {
-        width: 80px;
-    }
-
-    #keyboard span.space {
-        width: 200px;
-    }
-
-    #keyboard span.active {
-        background: #8f8;
-    }
-
-    #keyboard span.wrong {
-        background: #f88;
-    }
-
-    #keyboard span.next {
-        background: #88f !important;
-    }
-</style>
-
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         // Динамічні дані з PHP
+        const lang = '<?= $lang ?>'; // отримуємо мову з PHP
         const lessonText = <?= json_encode($lesson['content'], JSON_HEX_TAG) ?>;
         const lessonId = <?= (int) $lesson['id'] ?>;
 
@@ -235,15 +184,35 @@
         const accEl = document.getElementById('accuracy');
         const timeEl = document.getElementById('time');
 
+        const keys = {};
 
         // Зібрали мапу клавіш
-        const keys = {};
+        const allKeys = document.querySelectorAll('.key');
+        function updateKeyboard() {
+            allKeys.forEach(key => {
+                const keyLang = key.getAttribute('data-lang');
+                if (keyLang === lang) {
+                    key.style.display = 'inline-block';  // Показуємо клавіші для поточної мови
+                } else {
+                    key.style.display = 'none';  // Ховаємо клавіші іншої мови
+                }
+            });
+        }
+        updateKeyboard();
+
         document.querySelectorAll('#keyboard span').forEach(el => {
             keys[el.dataset.key] = el;
         });
 
         let pos = 0, correct = 0, total = 0, startTime = null, timer = null;
         const levelSelect = document.getElementById('difficulty');
+
+
+
+        
+
+
+
 
         function clearNextHighlights() {
             document.querySelectorAll('#keyboard span.next')
@@ -271,14 +240,26 @@
                 return;
             }
 
+            console.log(`Character to match: ${ch}`);
+
             // шукаємо незалежно від регістру
             for (let code in keys) {
-                if (keys[code].textContent.toLowerCase() === ch.toLowerCase()) {
+                const key = keys[code].textContent.trim();
+
+                const normalizedCh = ch.normalize("NFC");
+                const normalizedKey = key.normalize("NFC");
+
+                console.log(`Character to match: ${ch} (Type: ${typeof ch})`);
+                console.log(`Checking key: ${key} (Type: ${typeof key})`);
+
+                if (normalizedKey.toLowerCase() === normalizedCh.toLowerCase()) {
+                    console.log(`Match found: ${normalizedKey} === ${normalizedCh}`);
                     keys[code].classList.add('next');
 
                     break;
                 }
             }
+            console.log(`-----------------------------------}`);
         }
 
         // Рендер тексту згідно складності
@@ -361,6 +342,7 @@
             if (pos >= lessonText.length) {
                 clearInterval(timer);
                 input.placeholder = 'Урок завершено!';
+                input.disabled = true
                 input.value = '';
 
                 // Відправка статистики
@@ -384,6 +366,7 @@
         resetBtn.addEventListener('click', () => {
             clearInterval(timer);
             pos = correct = total = 0;
+            input.disabled = false;
             startTime = null;
             wpmEl.textContent = '0 зн/хв';
             accEl.textContent = '100%';
@@ -408,5 +391,6 @@
         // Перший рендер і фокус
         renderText();
         input.focus();
+
     });
 </script>

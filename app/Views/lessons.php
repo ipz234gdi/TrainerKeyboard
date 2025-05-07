@@ -40,7 +40,8 @@
       <td style="text-align:center"><?= $done?'✔':'–' ?></td>
       <td>
         <form method="post" action="/lessons/start">
-          <input type="hidden" name="id" value="<?= $id ?>">
+          <input type="hidden" name="lesson_id" value="<?= $id ?>">
+          <input type="hidden" name="lang" value="<?= $lang ?>">
           <button type="submit">Preview</button>
         </form>
       </td>
@@ -78,7 +79,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <strong>${item.id}. ${item.title}</strong>
                 <p>${item.preview}</p>
                 <form method="post" action="/lessons/start" style="display:inline">
-                  <input type="hidden" name="id" value="${item.id}">
+                  <input type="hidden" name="lesson_id" value="${item.id}">
+                  <input type="hidden" name="lang" value="${item.lang}">
                   <button type="submit">Preview</button>
                 </form>
               `;

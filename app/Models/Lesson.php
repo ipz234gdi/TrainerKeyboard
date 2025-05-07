@@ -46,6 +46,20 @@ class Lesson
     return $stmt->fetch() ?: null;
   }
 
+  public function getLangById(int $id): ?string
+  {
+    // Підготовка запиту для отримання мови
+    $stmt = $this->db->prepare(
+      "SELECT lang FROM lessons WHERE id = ?"
+    );
+    $stmt->execute([$id]);
+
+    // Повертаємо результат, якщо мова знайдена
+    $lang = $stmt->fetchColumn();
+
+    return $lang ?: null; // якщо мови немає, повертаємо null
+  }
+
   public function create(array $data): bool
   {
     $stmt = $this->db->prepare(

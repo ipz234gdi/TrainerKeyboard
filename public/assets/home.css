@@ -1,0 +1,82 @@
+.card {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 15px;
+}
+
+.stat-box h3 {
+    margin: 0 0 5px;
+    font-size: 1em;
+}
+
+.typing-area {
+    margin-bottom: 15px;
+}
+
+#text-display {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+#input-area {
+    width: 100%;
+    padding: 8px;
+    font-size: 1em;
+    box-sizing: border-box;
+}
+
+#keyboard {
+    user-select: none;
+}
+
+.key-row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 5px;
+}
+
+#keyboard span {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border: 1px solid #555;
+    margin: 0 2px;
+    border-radius: 4px;
+    background: #eee;
+    transition: background .1s;
+}
+
+#keyboard span.wide {
+    width: 60px;
+}
+
+#keyboard span.extra-wide {
+    width: 80px;
+}
+
+#keyboard span.space {
+    width: 200px;
+}
+
+#keyboard span.active {
+    background: #8f8;
+}
+
+#keyboard span.wrong {
+    background: #f88;
+}
+
+#keyboard span.next {
+    background: #88f !important;
+}

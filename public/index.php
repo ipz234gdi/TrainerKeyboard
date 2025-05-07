@@ -41,7 +41,7 @@ $router->get(  '/admin/users',             'App\Controllers\AdminController@user
 $router->post('/admin/users/update-role', 'App\Controllers\AdminController@usersUpdateRole');
 $router->post('/admin/users/toggle-block','App\Controllers\AdminController@usersToggleBlock');
 
-$router->get('/blind-test', 'App\Controllers\BlindTestController@index');
-$router->post('/blind-test/start', 'App\Controllers\BlindTestController@start');
+$router->get('/blind-test', 'App\Controllers\BlindTestController@start');
+// $router->post('/blind-test/start', 'App\Controllers\BlindTestController@start');
 
 $router->dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);
