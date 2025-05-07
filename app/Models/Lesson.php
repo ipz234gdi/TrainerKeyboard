@@ -113,51 +113,60 @@ class Lesson
 
   public function updateLessonRating(int $lessonId): void
   {
-    // Отримуємо кількість користувачів, що оцінили урок (кількість записів для уроку в таблиці stats)
+    // Отримуємо всі статистики для конкретного уроку
     $stmt = $this->db->prepare(
-      "SELECT COUNT(DISTINCT user_id) FROM stats WHERE lesson_id = :lesson_id"
+      "SELECT wpm FROM stats WHERE lesson_id = :lesson_id"
     );
     $stmt->execute([':lesson_id' => $lessonId]);
-    $userCount = $stmt->fetchColumn();
+    $wpmValues = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
-    // Якщо користувачі вже є, обчислюємо середній рейтинг
-    if ($userCount > 0) {
-      // Використовуємо таблицю stats для обчислення середнього рейтингу
-      $stmt = $this->db->prepare(
-        "SELECT AVG(wpm) AS average_rating FROM stats WHERE lesson_id = :lesson_id"
-      );
-      $stmt->execute([':lesson_id' => $lessonId]);
-      $averageRating = $stmt->fetchColumn();
+    // Якщо є статистика для цього уроку
+    if (count($wpmValues) > 0) {
+      // Обчислюємо середнє значення wpm для цього уроку
+      $averageLessonWpm = array_sum($wpmValues) / count($wpmValues);
 
-      // Оновлюємо рейтинг уроку в таблиці lessons
+      // Отримуємо середнє значення wpm для всіх уроків
       $stmt = $this->db->prepare(
-        "UPDATE lessons SET rating = :rating WHERE id = :lesson_id"
+        "SELECT AVG(wpm) AS average_wpm FROM stats"
       );
-      $stmt->execute([
-        ':rating' => $averageRating,
-        ':lesson_id' => $lessonId
-      ]);
+      $stmt->execute();
+      $overallAverageWpm = $stmt->fetchColumn();
+
+      // Якщо середнє значення для всіх уроків не є нульовим
+      if ($overallAverageWpm > 0) {
+        // Обчислюємо відсоток від середнього
+        $percentage = (10 - ($averageLessonWpm / $overallAverageWpm)) * 1;
+
+        // Оновлюємо рейтинг уроку в таблиці lessons
+        $stmt = $this->db->prepare(
+          "UPDATE lessons SET rating = :rating WHERE id = :lesson_id"
+        );
+        $stmt->execute([
+          ':rating' => round($percentage, 2), // Оновлюємо рейтинг як відсоток
+          ':lesson_id' => $lessonId
+        ]);
+      }
     }
   }
 
   public function updateLessonDifficulty(int $lessonId): void
   {
-    // Отримуємо всі складності, оцінені користувачами для цього уроку (таблиця stats)
+    // Отримуємо всі WPM (швидкість друку) для цього уроку з таблиці stats
     $stmt = $this->db->prepare(
-      "SELECT difficulty FROM stats WHERE lesson_id = :lesson_id"
+      "SELECT wpm FROM stats WHERE lesson_id = :lesson_id"
     );
     $stmt->execute([':lesson_id' => $lessonId]);
 
-    $difficulties = $stmt->fetchAll(PDO::FETCH_COLUMN);
+    $wpms = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
-    if (count($difficulties) > 0) {
-      // Обчислюємо середню складність
-      $averageDifficulty = array_sum($difficulties) / count($difficulties);
+    if (count($wpms) > 0) {
+      // Обчислюємо середній WPM
+      $averageWpm = array_sum($wpms) / count($wpms);
 
       // Визначаємо відповідну складність (оскільки складність зберігається як ENUM)
-      if ($averageDifficulty <= 3) {
+      if ($averageWpm <= 20) {
         $difficulty = 'easy';
-      } elseif ($averageDifficulty <= 6) {
+      } elseif ($averageWpm <= 40) {
         $difficulty = 'medium';
       } else {
         $difficulty = 'hard';
