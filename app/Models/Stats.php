@@ -10,8 +10,10 @@ class Stats
   {
     $this->db = Database::getInstance();
   }
-
-  public function completedLessons(int $userId): array {
+  
+  // Метод для отримання завершених уроків для користувача
+  public function completedLessons(int $userId): array
+  {
     $stmt = $this->db->prepare(
       "SELECT DISTINCT lesson_id
        FROM stats
@@ -29,18 +31,27 @@ class Stats
     return $s->execute([$uid, $lid, $wpm, $acc]);
   }
 
-  public function forUser(int $uid): array
+  // Метод для отримання статистики по конкретному уроку
+  public function forLesson(int $lessonId): array
   {
-    $s = $this->db->prepare(
-      "SELECT s.*, l.title FROM stats s
-       JOIN lessons l ON l.id=s.lesson_id
-       WHERE s.user_id=?
-       ORDER BY s.created_at DESC"
+    $stmt = $this->db->prepare(
+      "SELECT * FROM lesson_stats WHERE lesson_id = :lesson_id"
     );
-    $s->execute([$uid]);
-    return $s->fetchAll();
+    $stmt->execute([':lesson_id' => $lessonId]);
+    return $stmt->fetchAll();
   }
 
+  // Метод для отримання статистики по користувачеві
+  public function forUser(int $userId): array
+  {
+    $stmt = $this->db->prepare(
+      "SELECT * FROM user_stats WHERE user_id = :user_id"
+    );
+    $stmt->execute([':user_id' => $userId]);
+    return $stmt->fetch();
+  }
+
+  // Метод для отримання статистики по всіх користувачах
   public function allUsersStats(): array
   {
     // останній результат кожного користувача
@@ -53,17 +64,6 @@ class Stats
     );
     return $s->fetchAll();
   }
-
-  public function getAverageStats(int $uid): array
-    {
-        $s = $this->db->prepare(
-            "SELECT AVG(wpm) as average_wpm, AVG(accuracy) as average_accuracy
-             FROM stats 
-             WHERE user_id = ?"
-        );
-        $s->execute([$uid]);
-        return $s->fetch(PDO::FETCH_ASSOC);
-    }
 
   public function forUserFiltered(int $uid, ?string $from, ?string $to, int $lessonId): array
   {

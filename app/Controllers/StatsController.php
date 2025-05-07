@@ -2,6 +2,7 @@
 namespace App\Controllers;
 use App\Core\BaseController;
 use App\Models\Stats;
+use App\Models\Lesson;
 
 class StatsController extends BaseController
 {
@@ -34,7 +35,7 @@ class StatsController extends BaseController
       'allStats' => $allStats,
       'chartData' => $chartData,
       'filter' => compact('from', 'to', 'lessonId'),
-      'lessons' => (new \App\Models\Lesson())->all()
+      'lessons' => (new Lesson())->all()
     ]);
   }
 
@@ -49,11 +50,22 @@ class StatsController extends BaseController
       echo json_encode(['error' => 'Not authenticated']);
       return;
     }
+
+    // Отримуємо дані з POST запиту
     $json = json_decode(file_get_contents('php://input'), true);
     $lessonId = (int) ($json['lesson_id'] ?? 0);
     $wpm = (int) ($json['wpm'] ?? 0);
     $accuracy = (float) ($json['accuracy'] ?? 0);
+
+    // Зберігаємо статистику користувача
     $ok = (new Stats())->create($_SESSION['user_id'], $lessonId, $wpm, $accuracy);
+
+    // Якщо статистика збережена успішно, оновлюємо рейтинг і складність
+    if ($ok) {
+      // Оновлюємо рейтинг і складність уроку
+      (new Lesson())->updateLessonRating($lessonId);
+      (new Lesson())->updateLessonDifficulty($lessonId);
+    }
     echo json_encode(['success' => $ok]);
   }
 }

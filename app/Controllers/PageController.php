@@ -38,8 +38,14 @@ class PageController extends BaseController
         $lang = $_GET['lang'] ?? ($_SESSION['lang'] ?? 'ua');
         $_SESSION['lang'] = in_array($lang, ['ua', 'en']) ? $lang : 'ua';
 
-        // уроки по мові
-        $lessons = (new Lesson())->allByLang($_SESSION['lang']);
+        // значення складності
+        $difficulty = $_GET['difficulty'] ?? 'medium';  // ініціалізація $difficulty
+
+        // значення мінімального рейтингу
+        $minRating = (float) ($_GET['minRating'] ?? 0);
+
+        // уроки по мові з фільтрацією
+        $lessons = (new Lesson())->allByLangAndFilters($_SESSION['lang'], $difficulty, $minRating);
 
         // отримати ID вже пройдених уроків
         $stats = new Stats();
@@ -48,7 +54,9 @@ class PageController extends BaseController
         $this->view('lessons', [
             'lessons' => $lessons,
             'lang' => $_SESSION['lang'],
-            'completed' => $completed
+            'completed' => $completed,
+            'minRating' => $minRating,  // передаємо значення в вигляд
+            'difficulty' => $difficulty  // передаємо значення складності
         ]);
     }
 
@@ -64,9 +72,9 @@ class PageController extends BaseController
         $lesson = $lid
             ? (new Lesson())->getById($lid)
             : ['id' => 0, 'title' => 'Тестова зона', 'content' => 'Набирайте будь-який текст...'];
-        
+
         $lang = (new Lesson())->getLangById($lid) ?: 'ua';
-            
+
         $this->view('home', ['lesson' => $lesson, 'lang' => $lang]);
     }
 

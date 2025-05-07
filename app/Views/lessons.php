@@ -18,7 +18,7 @@
   </label>
 
   <label>Рейтинг:
-    <input type="number" name="minRating" value="<?= $minRating ?>" min="0" max="5" step="0.1"
+    <input type="number" name="minRating" value="<?= htmlspecialchars($minRating) ?>" min="0" max="5" step="0.1"
       onchange="this.form.submit()">
   </label>
 </form>

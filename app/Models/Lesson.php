@@ -72,12 +72,12 @@ class Lesson
     ]);
   }
 
-  public function update(int $id, array $data): bool
+  public function update(array $data): bool
   {
     $stmt = $this->db->prepare(
       "UPDATE lessons
-       SET title=:title, content=:content, lang=:lang, category_id=:cat, tags=:tags
-       WHERE id=:id"
+         SET title=:title, content=:content, lang=:lang, category_id=:cat, tags=:tags, difficulty=:difficulty, rating=:rating
+         WHERE id=:id"
     );
     return $stmt->execute([
       ':title' => $data['title'],
@@ -85,7 +85,9 @@ class Lesson
       ':lang' => $data['lang'],
       ':cat' => $data['category_id'] ?: null,
       ':tags' => $data['tags'] ?? '',
-      ':id' => $id
+      ':difficulty' => $data['difficulty'],
+      ':rating' => $data['rating'],
+      ':id' => $data['id'] // Передаємо ID для оновлення
     ]);
   }
 
@@ -97,15 +99,69 @@ class Lesson
 
   public function search(string $q, string $lang, string $difficulty, float $minRating): array
   {
-      $sql = "SELECT id, title, LEFT(content, 200) AS preview, lang
+    $sql = "SELECT id, title, LEFT(content, 200) AS preview, lang
               FROM lessons
               WHERE lang = :lang
                 AND (title LIKE :q OR content LIKE :q)
                 AND difficulty = :difficulty
                 AND rating >= :minRating
               ORDER BY rating DESC";
-      $stmt = $this->db->prepare($sql);
-      $stmt->execute([':lang' => $lang, ':q' => "%{$q}%", ':difficulty' => $difficulty, ':minRating' => $minRating]);
-      return $stmt->fetchAll();
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([':lang' => $lang, ':q' => "%{$q}%", ':difficulty' => $difficulty, ':minRating' => $minRating]);
+    return $stmt->fetchAll();
+  }
+
+  public function updateLessonRating(int $lessonId): void
+  {
+    // Отримуємо кількість користувачів, що оцінили урок
+    $stmt = $this->db->prepare(
+      "SELECT COUNT(*) FROM lesson_user_stats WHERE lesson_id = :lesson_id"
+    );
+    $stmt->execute([':lesson_id' => $lessonId]);
+    $userCount = $stmt->fetchColumn();
+
+    // Якщо користувачі вже є, обчислюємо середній рейтинг
+    if ($userCount > 0) {
+      $stmt = $this->db->prepare(
+        "SELECT AVG(rating) FROM lesson_user_stats WHERE lesson_id = :lesson_id"
+      );
+      $stmt->execute([':lesson_id' => $lessonId]);
+      $averageRating = $stmt->fetchColumn();
+
+      // Оновлюємо рейтинг уроку
+      $stmt = $this->db->prepare(
+        "UPDATE lessons SET rating = :rating, user_count = :user_count WHERE id = :lesson_id"
+      );
+      $stmt->execute([
+        ':rating' => $averageRating,
+        ':user_count' => $userCount,
+        ':lesson_id' => $lessonId
+      ]);
+    }
+  }
+
+  public function updateLessonDifficulty(int $lessonId): void
+  {
+    // Отримуємо всі складності, оцінені користувачами для цього уроку
+    $stmt = $this->db->prepare(
+      "SELECT difficulty FROM lesson_user_stats WHERE lesson_id = :lesson_id"
+    );
+    $stmt->execute([':lesson_id' => $lessonId]);
+
+    $difficulties = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+    if (count($difficulties) > 0) {
+      // Обчислюємо середню складність
+      $averageDifficulty = array_sum($difficulties) / count($difficulties);
+
+      // Оновлюємо складність уроку
+      $stmt = $this->db->prepare(
+        "UPDATE lessons SET difficulty = :difficulty WHERE id = :lesson_id"
+      );
+      $stmt->execute([
+        ':difficulty' => $averageDifficulty,
+        ':lesson_id' => $lessonId
+      ]);
+    }
   }
 }

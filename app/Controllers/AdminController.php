@@ -92,6 +92,7 @@ class AdminController extends BaseController
         try {
             $id = (int) ($_POST['id'] ?? 0);
             $data = [
+                'id' => $id,
                 'title' => trim($_POST['title'] ?? ''),
                 'content' => trim($_POST['content'] ?? ''),
                 'lang' => ($_POST['lang'] === 'en' ? 'en' : 'ua'),
@@ -104,7 +105,7 @@ class AdminController extends BaseController
             }
 
             // Оновлення уроку
-            $this->lessonModel->update($id, $data);
+            $this->lessonModel->update($data);
             $this->redirect('/admin/lessons');
         } catch (Exception $e) {
             error_log($e->getMessage());
