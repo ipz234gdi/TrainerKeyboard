@@ -20,8 +20,8 @@ class BlindTestController extends BaseController
     
         // Збереження уроку в сесії (якщо потрібно, для подальшої навігації або статистики)
         $_SESSION['current_lesson'] = $lesson['id'];
-    
+        $lang = 'ua';
         // Відправка даних на сторінку
-        $this->view('home', ['lesson' => $lesson], ['lang' => 'en']);
+        $this->view('home', ['lesson' => $lesson, 'lang' => $lang]);
     }
 }

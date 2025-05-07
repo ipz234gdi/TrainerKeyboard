@@ -52,24 +52,39 @@
     <div id="keyboard">
         <!-- Ряд 1 -->
         <div class="key-row">
-            <span data-key="Backquote">~</span>
-            <span data-key="Digit1">1</span>
-            <span data-key="Digit2">2</span>
-            <span data-key="Digit3">3</span>
-            <span data-key="Digit4">4</span>
-            <span data-key="Digit5">5</span>
-            <span data-key="Digit6">6</span>
-            <span data-key="Digit7">7</span>
-            <span data-key="Digit8">8</span>
-            <span data-key="Digit9">9</span>
-            <span data-key="Digit0">0</span>
-            <span data-key="Minus">-</span>
-            <span data-key="Equal">=</span>
-            <span data-key="Backspace" class="wide">⌫</span>
+            <span class="key" data-key="Backquote" data-lang="en">~</span>
+            <span class="key" data-key="Digit1" data-lang="en">1</span>
+            <span class="key" data-key="Digit2" data-lang="en">2</span>
+            <span class="key" data-key="Digit3" data-lang="en">3</span>
+            <span class="key" data-key="Digit4" data-lang="en">4</span>
+            <span class="key" data-key="Digit5" data-lang="en">5</span>
+            <span class="key" data-key="Digit6" data-lang="en">6</span>
+            <span class="key" data-key="Digit7" data-lang="en">7</span>
+            <span class="key" data-key="Digit8" data-lang="en">8</span>
+            <span class="key" data-key="Digit9" data-lang="en">9</span>
+            <span class="key" data-key="Digit0" data-lang="en">0</span>
+            <span class="key" data-key="Minus" data-lang="en">-</span>
+            <span class="key" data-key="Equal" data-lang="en">=</span>
+            <span class="key wide" data-key="Backspace" data-lang="en">⌫</span>
+            <span class="key" data-key="Backquote" data-lang="ua">~</span>
+            <span class="key" data-key="Digit1" data-lang="ua">1</span>
+            <span class="key" data-key="Digit2" data-lang="ua">2</span>
+            <span class="key" data-key="Digit3" data-lang="ua">3</span>
+            <span class="key" data-key="Digit4" data-lang="ua">4</span>
+            <span class="key" data-key="Digit5" data-lang="ua">5</span>
+            <span class="key" data-key="Digit6" data-lang="ua">6</span>
+            <span class="key" data-key="Digit7" data-lang="ua">7</span>
+            <span class="key" data-key="Digit8" data-lang="ua">8</span>
+            <span class="key" data-key="Digit9" data-lang="ua">9</span>
+            <span class="key" data-key="Digit0" data-lang="ua">0</span>
+            <span class="key" data-key="Minus" data-lang="ua">-</span>
+            <span class="key" data-key="Equal" data-lang="ua">=</span>
+            <span class="key wide" data-key="Backspace" data-lang="ua">⌫</span>
         </div>
         <!-- Ряд 2 -->
         <div class="key-row">
-            <span data-key="Tab" class="wide">Tab</span>
+            <span class="key wide" data-key="Tab" data-lang="en">Tab</span>
+            <span class="key wide" data-key="Tab" data-lang="ua">Tab</span>
             <span class="key" data-key="KeyQ" data-lang="en">Q</span>
             <span class="key" data-key="KeyQ" data-lang="ua">Й</span>
             <span class="key" data-key="KeyW" data-lang="en">W</span>
@@ -94,11 +109,13 @@
             <span class="key" data-key="BracketLeft" data-lang="ua">Х</span>
             <span class="key" data-key="BracketRight" data-lang="en">]</span>
             <span class="key" data-key="BracketRight" data-lang="ua">Ї</span>
-            <span data-key="Backslash">\</span>
+            <span class="key" data-key="Backslash" data-lang="en">\</span>
+            <span class="key" data-key="Backslash" data-lang="ua">/</span>
         </div>
         <!-- Ряд 3 -->
         <div class="key-row">
-            <span data-key="CapsLock" class="wide">Caps</span>
+            <span class="key wide" data-key="CapsLock" data-lang="en">Caps</span>
+            <span class="key wide" data-key="CapsLock" data-lang="ua">Caps</span>
             <span class="key" data-key="KeyA" data-lang="en">A</span>
             <span class="key" data-key="KeyA" data-lang="ua">Ф</span>
             <span class="key" data-key="KeyS" data-lang="en">S</span>
@@ -121,11 +138,13 @@
             <span class="key" data-key="Semicolon" data-lang="ua">Ж</span>
             <span class="key" data-key="Quote" data-lang="en">'</span>
             <span class="key" data-key="Quote" data-lang="ua">Є</span>
-            <span data-key="Enter" class="wide">Enter</span>
+            <span class="key wide" data-key="Enter" data-lang="en">Enter</span>
+            <span class="key wide" data-key="Enter" data-lang="ua">Enter</span>
         </div>
         <!-- Ряд 4 -->
         <div class="key-row">
-            <span data-key="ShiftLeft" class="extra-wide">Shift</span>
+            <span class="key extra-wide" data-key="ShiftLeft" data-lang="en">Shift</span>
+            <span class="key extra-wide" data-key="ShiftLeft" data-lang="ua">Shift</span>
             <span class="key" data-key="KeyZ" data-lang="en">Z</span>
             <span class="key" data-key="KeyZ" data-lang="ua">Я</span>
             <span class="key" data-key="KeyX" data-lang="en">X</span>
@@ -146,17 +165,25 @@
             <span class="key" data-key="Period" data-lang="ua">Ю</span>
             <span class="key" data-key="Slash" data-lang="en">/</span>
             <span class="key" data-key="Slash" data-lang="ua">. ,</span>
-            <span data-key="ShiftRight" class="extra-wide">Shift</span>
+            <span class="key extra-wide" data-key="ShiftRight" data-lang="en">Shift</span>
+            <span class="key extra-wide" data-key="ShiftRight" data-lang="ua">Shift</span>
         </div>
         <!-- Ряд 5 -->
         <div class="key-row">
-            <span data-key="ControlLeft" class="wide">Ctrl</span>
-            <span data-key="MetaLeft" class="wide">Win</span>
-            <span data-key="AltLeft" class="wide">Alt</span>
-            <span data-key="Space" class="space">Space</span>
-            <span data-key="AltRight" class="wide">Alt</span>
-            <span data-key="ContextMenu" class="wide">Menu</span>
-            <span data-key="ControlRight" class="wide">Ctrl</span>
+            <span class="key wide" data-key="ControlLeft" data-lang="en">Ctrl</span>
+            <span class="key wide" data-key="MetaLeft" data-lang="en">Win</span>
+            <span class="key wide" data-key="AltLeft" data-lang="en">Alt</span>
+            <span class="key space" data-key="Space" data-lang="en">Space</span>
+            <span class="key wide" data-key="AltRight" data-lang="en">Alt</span>
+            <span class="key wide" data-key="ContextMenu" data-lang="en">Menu</span>
+            <span class="key wide" data-key="ControlRight" data-lang="en">Ctrl</span>
+            <span class="key wide" data-key="ControlLeft" data-lang="ua">Ctrl</span>
+            <span class="key wide" data-key="MetaLeft" data-lang="ua">Win</span>
+            <span class="key wide" data-key="AltLeft" data-lang="ua">Alt</span>
+            <span class="key space" data-key="Space" data-lang="ua">Space</span>
+            <span class="key wide" data-key="AltRight" data-lang="ua">Alt</span>
+            <span class="key wide" data-key="ContextMenu" data-lang="ua">Menu</span>
+            <span class="key wide" data-key="ControlRight" data-lang="ua">Ctrl</span>
         </div>
     </div>
 </div>
@@ -167,230 +194,11 @@
 </footer>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Динамічні дані з PHP
-        const lang = '<?= $lang ?>'; // отримуємо мову з PHP
-        const lessonText = <?= json_encode($lesson['content'], JSON_HEX_TAG) ?>;
-        const lessonId = <?= (int) $lesson['id'] ?>;
-
-        // Елементи UI
-        const input = document.getElementById('input-area');
-        const display = document.getElementById('text-display');
-        const keyboard = document.getElementById('keyboard');
-        const resetBtn = document.getElementById('reset-btn');
-        const showKbCheck = document.getElementById('show-keyboard');
-
-        const wpmEl = document.getElementById('wpm');
-        const accEl = document.getElementById('accuracy');
-        const timeEl = document.getElementById('time');
-
-        const keys = {};
-
-        // Зібрали мапу клавіш
-        const allKeys = document.querySelectorAll('.key');
-        function updateKeyboard() {
-            allKeys.forEach(key => {
-                const keyLang = key.getAttribute('data-lang');
-                if (keyLang === lang) {
-                    key.style.display = 'inline-block';  // Показуємо клавіші для поточної мови
-                } else {
-                    key.style.display = 'none';  // Ховаємо клавіші іншої мови
-                }
-            });
-        }
-        updateKeyboard();
-
-        document.querySelectorAll('#keyboard span').forEach(el => {
-            keys[el.dataset.key] = el;
-        });
-
-        let pos = 0, correct = 0, total = 0, startTime = null, timer = null;
-        const levelSelect = document.getElementById('difficulty');
-
-
-
-        
-
-
-
-
-        function clearNextHighlights() {
-            document.querySelectorAll('#keyboard span.next')
-                .forEach(el => el.classList.remove('next'));
-        }
-        function clearPressHighlights() {
-            document.querySelectorAll('#keyboard span.active, #keyboard span.wrong')
-                .forEach(el => el.classList.remove('active', 'wrong'));
-        }
-        function resetHighlights() {
-            clearNextHighlights();
-            clearPressHighlights();
-        }
-
-        // Підсвічування наступної клавіші (рівень 1)
-        function highlightNextKey() {
-            const ch = lessonText[pos];
-
-            if (!ch) return;
-
-            // якщо це пробіл
-            if (ch === ' ') {
-                // тут — data-key="Space"
-                keys['Space']?.classList.add('next');
-                return;
-            }
-
-            console.log(`Character to match: ${ch}`);
-
-            // шукаємо незалежно від регістру
-            for (let code in keys) {
-                const key = keys[code].textContent.trim();
-
-                const normalizedCh = ch.normalize("NFC");
-                const normalizedKey = key.normalize("NFC");
-
-                console.log(`Character to match: ${ch} (Type: ${typeof ch})`);
-                console.log(`Checking key: ${key} (Type: ${typeof key})`);
-
-                if (normalizedKey.toLowerCase() === normalizedCh.toLowerCase()) {
-                    console.log(`Match found: ${normalizedKey} === ${normalizedCh}`);
-                    keys[code].classList.add('next');
-
-                    break;
-                }
-            }
-            console.log(`-----------------------------------}`);
-        }
-
-        // Рендер тексту згідно складності
-        function renderText() {
-            const level = levelSelect.value;
-
-            if (level === '3') {
-                display.innerHTML = lessonText[pos]
-                    ? `<span class="current">${lessonText[pos]}</span>`
-                    : '';
-            } else {
-                // повний текст із відмітками
-                let html = '';
-                for (let i = 0; i < lessonText.length; i++) {
-                    const ch = lessonText[i];
-                    if (i < pos) html += `<span class="correct">${ch}</span>`;
-                    else if (i === pos) html += `<span class="current">${ch}</span>`;
-                    else html += ch;
-                }
-                display.innerHTML = html;
-            }
-
-            // оновлюємо клавіатуру
-            if (level === '1') {
-                highlightNextKey();
-            }
-        }
-
-        // Почати таймер
-        function startTimer() {
-            startTime = Date.now();
-            timer = setInterval(updateStats, 1000);
-        }
-
-        // Оновлення статистики
-        function updateStats() {
-            const elapsed = (Date.now() - startTime) / 1000;
-            const minutes = elapsed / 60;
-            const wpm = minutes > 0 ? Math.round((correct / 5) / minutes) : 0;
-            wpmEl.textContent = `${wpm} зн/хв`;
-            const acc = total > 0 ? Math.round((correct / total) * 100) : 100;
-            accEl.textContent = `${acc}%`;
-            const mins = Math.floor(elapsed / 60);
-            const secs = Math.floor(elapsed % 60).toString().padStart(2, '0');
-            timeEl.textContent = `${mins}:${secs}`;
-        }
-
-        // Обробник натискання клавіш
-        input.addEventListener('keydown', e => {
-            const level = levelSelect.value;
-            resetHighlights();
-            if (!startTime && e.key.length === 1) startTimer();
-
-            // Обробка Backspace
-            if (e.key === 'Backspace') {
-                e.preventDefault();
-                if (pos > 0) pos--;
-                // для рівнів 2 і 3 прибираємо попередню pressed-підсвітку
-                if (level === '2' || level === '3') clearPressHighlights();
-                renderText();
-                return;
-            }
-            if (e.key.length !== 1) return;
-            e.preventDefault();
-
-            const expected = lessonText[pos];
-            total++;
-
-            // додаємо active/wrong для всіх рівнів
-            if (e.key === expected) {
-                pos++; correct++;
-                keys[e.code]?.classList.add('active');
-            } else {
-                keys[e.code]?.classList.add('wrong');
-            }
-
-            renderText();
-            updateStats();
-
-            if (pos >= lessonText.length) {
-                clearInterval(timer);
-                input.placeholder = 'Урок завершено!';
-                input.disabled = true
-                input.value = '';
-
-                // Відправка статистики
-                if (lessonId > 0) {
-                    fetch('/stats/create', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            lesson_id: lessonId,
-                            wpm: parseInt(wpmEl.textContent),
-                            accuracy: parseFloat(accEl.textContent)
-                        })
-                    });
-                }
-            }
-        });
-
-
-
-        // Кнопка “Почати спочатку”
-        resetBtn.addEventListener('click', () => {
-            clearInterval(timer);
-            pos = correct = total = 0;
-            input.disabled = false;
-            startTime = null;
-            wpmEl.textContent = '0 зн/хв';
-            accEl.textContent = '100%';
-            timeEl.textContent = '0:00';
-            resetHighlights();
-            renderText();
-            input.focus();
-        });
-
-        // Зміна рівня складності
-        levelSelect.addEventListener('change', () => {
-            resetHighlights();
-            renderText();
-            input.focus();
-        });
-
-        // Показ/приховування клавіатури
-        showKbCheck.addEventListener('change', () => {
-            keyboard.style.opacity = showKbCheck.checked ? '1' : '0';
-        });
-
-        // Перший рендер і фокус
-        renderText();
-        input.focus();
-
-    });
-</script>
+    // Передаємо конфіг у глобал
+    window.TRAINER_CONFIG = {
+      lang: '<?= addslashes($lang) ?>',
+      lessonText: <?= json_encode($lesson['content'], JSON_UNESCAPED_UNICODE) ?>,
+      lessonId: <?= (int)$lesson['id'] ?>,
+    };
+  </script>
+  <script src="/js/typing-trainer.js"></script>
