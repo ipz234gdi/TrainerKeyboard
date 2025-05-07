@@ -1,99 +1,152 @@
 <?php
 namespace App\Controllers;
+
 use App\Core\BaseController;
-use App\Models\Lesson;
-use App\Models\Category;
 use App\Models\User;
+use App\Models\Lesson;
+use App\Models\Stats;
+use App\Models\Category;
+use Exception;
 
 class AdminController extends BaseController
 {
+    private User $userModel;
+    private Lesson $lessonModel;
+    private Stats $statsModel;
+    private Category $categoryModel;
+
     public function __construct()
     {
-        $this->ensureAdmin(); // всі методи цього контролера — лише для адміна
+        // Перевірка прав доступу, щоб цей контролер міг використовувати лише адмін
+        $this->ensureAdmin();
+        // Ініціалізація моделей для роботи з базою даних
+        $this->userModel = new User();
+        $this->lessonModel = new Lesson();
+        $this->statsModel = new Stats();
+        $this->categoryModel = new Category();
     }
 
-    // LESSONS
+    // Управління уроками
     public function lessonsIndex(): void
     {
-        $lessons = (new Lesson())->all();
-        $categories = (new Category())->all();
+        // Завантажуємо всі уроки та категорії
+        $lessons = $this->lessonModel->all();
+        $categories = $this->categoryModel->all();
+
         $this->view('admin/lessons/index', [
             'lessons' => $lessons,
             'categories' => $categories
         ]);
     }
 
+    // Форма для створення уроків
     public function lessonsCreateForm(): void
     {
-        $categories = (new Category())->all();
+        // Завантажуємо категорії
+        $categories = $this->categoryModel->all();
         $this->view('admin/lessons/create', ['categories' => $categories]);
     }
 
+    // Додавання уроку
     public function lessonsStore(): void
     {
-        $data = [
-            'title' => trim($_POST['title'] ?? ''),
-            'content' => trim($_POST['content'] ?? ''),
-            'lang' => ($_POST['lang'] === 'en' ? 'en' : 'ua'),
-            'category_id' => (int) ($_POST['category_id'] ?? 0),
-            'tags' => trim($_POST['tags'] ?? '')
-        ];
-        (new Lesson())->create($data);
-        $this->redirect('/admin/lessons');
+        try {
+            // Перевірка отриманих даних
+            $data = [
+                'title' => trim($_POST['title'] ?? ''),
+                'content' => trim($_POST['content'] ?? ''),
+                'lang' => ($_POST['lang'] === 'en' ? 'en' : 'ua'),
+                'category_id' => (int) ($_POST['category_id'] ?? 0),
+                'tags' => trim($_POST['tags'] ?? '')
+            ];
+
+            if (!$data['title'] || !$data['content']) {
+                throw new Exception('Не всі поля заповнені.');
+            }
+
+            // Створення нового уроку
+            $this->lessonModel->create($data);
+            $this->redirect('/admin/lessons');
+        } catch (Exception $e) {
+            // Логування помилок
+            error_log($e->getMessage());
+            $this->view('admin/lessons/create', ['error' => 'Сталася помилка. Спробуйте ще раз.']);
+        }
     }
 
+    // Редагування уроку
     public function lessonsEditForm(): void
     {
         $id = (int) ($_GET['id'] ?? 0);
-        $lesson = (new Lesson())->getById($id);
-        $categories = (new Category())->all();
+        $lesson = $this->lessonModel->getById($id);
+        $categories = $this->categoryModel->all();
         $this->view('admin/lessons/edit', [
             'lesson' => $lesson,
             'categories' => $categories
         ]);
     }
 
+    // Оновлення уроку
     public function lessonsUpdate(): void
     {
-        $id = (int) ($_POST['id'] ?? 0);
-        $data = [
-            'title' => trim($_POST['title'] ?? ''),
-            'content' => trim($_POST['content'] ?? ''),
-            'lang' => ($_POST['lang'] === 'en' ? 'en' : 'ua'),
-            'category_id' => (int) ($_POST['category_id'] ?? 0),
-            'tags' => trim($_POST['tags'] ?? '')
-        ];
-        (new Lesson())->update($id, $data);
-        $this->redirect('/admin/lessons');
+        try {
+            $id = (int) ($_POST['id'] ?? 0);
+            $data = [
+                'title' => trim($_POST['title'] ?? ''),
+                'content' => trim($_POST['content'] ?? ''),
+                'lang' => ($_POST['lang'] === 'en' ? 'en' : 'ua'),
+                'category_id' => (int) ($_POST['category_id'] ?? 0),
+                'tags' => trim($_POST['tags'] ?? '')
+            ];
+
+            if (!$data['title'] || !$data['content']) {
+                throw new Exception('Не всі поля заповнені.');
+            }
+
+            // Оновлення уроку
+            $this->lessonModel->update($id, $data);
+            $this->redirect('/admin/lessons');
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+            $this->view('admin/lessons/edit', ['error' => 'Сталася помилка. Спробуйте ще раз.']);
+        }
     }
 
+    // Видалення уроку
     public function lessonsDestroy(): void
     {
-        $id = (int) ($_POST['id'] ?? 0);
-        (new Lesson())->delete($id);
-        $this->redirect('/admin/lessons');
+        try {
+            $id = (int) ($_POST['id'] ?? 0);
+            $this->lessonModel->delete($id);
+            $this->redirect('/admin/lessons');
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+            $this->view('admin/lessons/index', ['error' => 'Не вдалося видалити урок.']);
+        }
     }
 
-    // USERS
+    // Управління користувачами
     public function usersIndex(): void
     {
-        $users = (new User())->all();
+        $users = $this->userModel->all();
         $this->view('admin/users/index', ['users' => $users]);
     }
 
+    // Оновлення ролі користувача
     public function usersUpdateRole(): void
     {
         $id = (int) ($_POST['id'] ?? 0);
         $role = $_POST['role'] ?? 'student';
-        (new User())->updateRole($id, $role);
+        $this->userModel->updateRole($id, $role);
         $this->redirect('/admin/users');
     }
-    
+
+    // Блокування/розблокування користувача
     public function usersToggleBlock(): void
     {
         $id = (int) ($_POST['id'] ?? 0);
         $current = (int) ($_POST['blocked'] ?? 0);
-        (new User())->setBlocked($id, !$current);
+        $this->userModel->setBlocked($id, !$current);
         $this->redirect('/admin/users');
     }
 }
