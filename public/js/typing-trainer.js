@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
       this.cacheElements();
       this.bindEvents();
 
-      // Синхронізуємо CapsLock на будь-якій клавіші
       document.addEventListener("keydown", this.syncCapsLock.bind(this));
       document.addEventListener("keyup", this.syncCapsLock.bind(this));
 
