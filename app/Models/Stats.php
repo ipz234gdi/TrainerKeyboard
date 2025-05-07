@@ -54,6 +54,17 @@ class Stats
     return $s->fetchAll();
   }
 
+  public function getAverageStats(int $uid): array
+    {
+        $s = $this->db->prepare(
+            "SELECT AVG(wpm) as average_wpm, AVG(accuracy) as average_accuracy
+             FROM stats 
+             WHERE user_id = ?"
+        );
+        $s->execute([$uid]);
+        return $s->fetch(PDO::FETCH_ASSOC);
+    }
+
   public function forUserFiltered(int $uid, ?string $from, ?string $to, int $lessonId): array
   {
     $sql = "SELECT s.*, l.title 

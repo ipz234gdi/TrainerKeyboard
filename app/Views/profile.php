@@ -5,12 +5,14 @@
 
 <!DOCTYPE html>
 <html lang="uk">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Профіль користувача</title>
     <link rel="stylesheet" href="path/to/your/styles.css">
 </head>
+
 <body>
     <header>
         <h1>Профіль користувача</h1>
@@ -40,8 +42,11 @@
         </table>
 
         <h3>Загальний бал:</h3>
-        <p>Середня швидкість: <?= round($averageStats['average_wpm'], 2) ?> зн/хв</p>
-        <p>Середня точність: <?= round($averageStats['average_accuracy'], 2) ?>%</p>
+        <p>Середня швидкість:
+            <?= isset($averageStats['average_wpm']) ? round($averageStats['average_wpm'], 2) : 'N/A' ?> зн/хв</p>
+        <p>Середня точність:
+            <?= isset($averageStats['average_accuracy']) ? round($averageStats['average_accuracy'], 2) : 'N/A' ?>%</p>
+
 
         <h3>Доступні уроки:</h3>
         <ul>
@@ -55,4 +60,5 @@
         <p>© 2025 Тренажер сліпого друку</p>
     </footer>
 </body>
+
 </html>

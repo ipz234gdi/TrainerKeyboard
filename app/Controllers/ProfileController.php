@@ -19,7 +19,8 @@ class ProfileController extends BaseController
 
     public function showProfile(): void
     {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE)
+            session_start();
         if (empty($_SESSION['user_id'])) {
             $this->redirect('/');
         }

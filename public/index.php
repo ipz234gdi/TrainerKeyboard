@@ -22,6 +22,7 @@ $router->get('/',                'App\Controllers\AuthController@show');
 $router->post('/register',       'App\Controllers\AuthController@register');
 $router->post('/login',          'App\Controllers\AuthController@login');
 $router->get('/logout',          'App\Controllers\AuthController@logout');
+$router->get('/profile',          'App\Controllers\ProfileController@showProfile');
 
 $router->get( '/lessons',      'App\Controllers\PageController@lessons');
 $router->get('/lessons/search', 'App\Controllers\LessonController@search');
