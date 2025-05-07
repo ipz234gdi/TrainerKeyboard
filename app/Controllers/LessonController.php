@@ -10,111 +10,118 @@ use PDO;
 
 class LessonController extends BaseController
 {
-    private Lesson $lessonModel;
-    private Category $categoryModel;
-    private Stats $statsModel;
+  private Lesson $lessonModel;
+  private Category $categoryModel;
+  private Stats $statsModel;
 
-    public function __construct()
-    {
-        $this->lessonModel = new Lesson();
-        $this->categoryModel = new Category();
-        $this->statsModel = new Stats();
-    }
+  public function __construct()
+  {
+    $this->lessonModel = new Lesson();
+    $this->categoryModel = new Category();
+    $this->statsModel = new Stats();
+  }
 
-    // Виведення всіх уроків
-    public function index(): void
-    {
-        $lang = $_GET['lang'] ?? 'ua';
-        $lessons = $this->lessonModel->allByLang($lang);
-        $categories = $this->categoryModel->all();
+  // Виведення всіх уроків
+  public function index(): void
+  {
+    $lang = $_GET['lang'] ?? 'ua';
+    $difficulty = $_GET['difficulty'] ?? 'medium';
+    $minRating = (float) ($_GET['minRating'] ?? 0);
 
-        $this->view('lessons/index', [
-            'lessons' => $lessons,
-            'categories' => $categories
-        ]);
-    }
+    $lessons = $this->lessonModel->allByLangAndFilters($lang, $difficulty, $minRating);
+    $categories = $this->categoryModel->all();
 
-    // Пошук уроків
-    public function search(): void
-    {
-        $q = $_GET['query'] ?? '';
-        $lang = $_GET['lang'] ?? 'ua';
-        $results = $this->lessonModel->search($q, $lang);
-        $this->view('lessons/search', ['results' => $results]);
-    }
+    $this->view('lessons/index', [
+      'lessons' => $lessons,
+      'categories' => $categories
+    ]);
+  }
 
-    // Виведення детальної інформації про урок
-    public function show($id): void
-    {
-        $lesson = $this->lessonModel->getById($id);
-        $stats = $this->statsModel->forLesson($id);
+  // Пошук уроків
+  public function search(): void
+  {
+    $q = $_GET['query'] ?? '';
+    $lang = $_GET['lang'] ?? 'ua';
+    $difficulty = $_GET['difficulty'] ?? 'medium';
+    $minRating = (float) ($_GET['minRating'] ?? 0);
 
-        $this->view('lessons/show', [
-            'lesson' => $lesson,
-            'stats' => $stats
-        ]);
-    }
+    $results = $this->lessonModel->search($q, $lang, $difficulty, $minRating);
 
-    // Створення нового уроку
-    public function create(): void
-    {
-        $categories = $this->categoryModel->all();
-        $this->view('admin/lessons/create', ['categories' => $categories]);
-    }
+    $this->view('lessons/search', ['results' => $results]);
+  }
 
-    // Збереження нового уроку
-    public function store(): void
-    {
-        $data = [
-            'title' => trim($_POST['title']),
-            'content' => trim($_POST['content']),
-            'category_id' => (int) $_POST['category_id'],
-            'lang' => $_POST['lang'] ?? 'ua',
-            'tags' => trim($_POST['tags'] ?? '')
-        ];
+  // Виведення детальної інформації про урок
+  public function show($id): void
+  {
+    $lesson = $this->lessonModel->getById($id);
+    $stats = $this->statsModel->forLesson($id);
 
-        $this->lessonModel->create($data);
-        $this->redirect('/lessons');
-    }
+    $this->view('lessons/show', [
+      'lesson' => $lesson,
+      'stats' => $stats
+    ]);
+  }
 
-    // Редагування уроку
-    public function edit($id): void
-    {
-        $lesson = $this->lessonModel->getById($id);
-        $categories = $this->categoryModel->all();
-        $this->view('admin/lessons/edit', [
-            'lesson' => $lesson,
-            'categories' => $categories
-        ]);
-    }
+  // Створення нового уроку
+  public function create(): void
+  {
+    $categories = $this->categoryModel->all();
+    $this->view('admin/lessons/create', ['categories' => $categories]);
+  }
 
-    // Оновлення уроку
-    public function update(): void
-    {
-        $data = [
-            'id' => (int) $_POST['id'],
-            'title' => trim($_POST['title']),
-            'content' => trim($_POST['content']),
-            'category_id' => (int) $_POST['category_id'],
-            'lang' => $_POST['lang'] ?? 'ua',
-            'tags' => trim($_POST['tags'] ?? '')
-        ];
+  // Збереження нового уроку
+  public function store(): void
+  {
+    $data = [
+      'title' => trim($_POST['title']),
+      'content' => trim($_POST['content']),
+      'category_id' => (int) $_POST['category_id'],
+      'lang' => $_POST['lang'] ?? 'ua',
+      'tags' => trim($_POST['tags'] ?? '')
+    ];
 
-        $this->lessonModel->update($data);
-        $this->redirect('/lessons');
-    }
+    $this->lessonModel->create($data);
+    $this->redirect('/lessons');
+  }
 
-    // Видалення уроку
-    public function destroy($id): void
-    {
-        $this->lessonModel->delete($id);
-        $this->redirect('/lessons');
-    }
+  // Редагування уроку
+  public function edit($id): void
+  {
+    $lesson = $this->lessonModel->getById($id);
+    $categories = $this->categoryModel->all();
+    $this->view('admin/lessons/edit', [
+      'lesson' => $lesson,
+      'categories' => $categories
+    ]);
+  }
 
-    // Показ статистики по уроках
-    public function stats($id): void
-    {
-        $lessonStats = $this->statsModel->forLesson($id);
-        $this->view('lessons/stats', ['lessonStats' => $lessonStats]);
-    }
+  // Оновлення уроку
+  public function update(): void
+  {
+    $data = [
+      'id' => (int) $_POST['id'],
+      'title' => trim($_POST['title']),
+      'content' => trim($_POST['content']),
+      'category_id' => (int) $_POST['category_id'],
+      'lang' => $_POST['lang'] ?? 'ua',
+      'tags' => trim($_POST['tags'] ?? '')
+    ];
+
+    $this->lessonModel->update($data);
+    $this->redirect('/lessons');
+  }
+
+  // Видалення уроку
+  public function destroy($id): void
+  {
+    $this->lessonModel->delete($id);
+    $this->redirect('/lessons');
+  }
+
+  // Показ статистики по уроках
+  public function stats($id): void
+  {
+    $lessonStats = $this->statsModel->forLesson($id);
+    $this->view('lessons/stats', ['lessonStats' => $lessonStats]);
+  }
 }

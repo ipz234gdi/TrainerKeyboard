@@ -11,26 +11,23 @@ class Lesson
     $this->db = Database::getInstance();
   }
 
-  public function allByLang(string $lang): array
+  public function allByLangAndFilters(string $lang, string $difficulty, float $minRating): array
   {
     $stmt = $this->db->prepare(
       "SELECT l.*, c.name AS category
-       FROM lessons l
-       LEFT JOIN categories c ON l.category_id=c.id
-       WHERE l.lang = :lang
-       ORDER BY l.id"
+            FROM lessons l
+            LEFT JOIN categories c ON l.category_id = c.id
+            WHERE l.lang = :lang AND l.difficulty = :difficulty AND l.rating >= :minRating
+            ORDER BY l.rating DESC"
     );
-    $stmt->execute([':lang' => $lang]);
+    $stmt->execute([':lang' => $lang, ':difficulty' => $difficulty, ':minRating' => $minRating]);
     return $stmt->fetchAll();
   }
 
   public function all(): array
   {
     return $this->db
-      ->query("SELECT l.*, c.name AS category
-               FROM lessons l
-               LEFT JOIN categories c ON l.category_id=c.id
-               ORDER BY l.id")
+      ->query("SELECT l.*, c.name AS category FROM lessons l LEFT JOIN categories c ON l.category_id = c.id ORDER BY l.id")
       ->fetchAll();
   }
 
@@ -98,15 +95,17 @@ class Lesson
     return $stmt->execute([$id]);
   }
 
-  public function search(string $q, string $lang): array
+  public function search(string $q, string $lang, string $difficulty, float $minRating): array
   {
-    $sql = "SELECT id, title, LEFT(content,200) AS preview, lang
-            FROM lessons
-            WHERE lang = :lang
-              AND (title LIKE :q OR content LIKE :q)
-            ORDER BY id";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute([':lang' => $lang, ':q' => "%{$q}%"]);
-    return $stmt->fetchAll();
+      $sql = "SELECT id, title, LEFT(content, 200) AS preview, lang
+              FROM lessons
+              WHERE lang = :lang
+                AND (title LIKE :q OR content LIKE :q)
+                AND difficulty = :difficulty
+                AND rating >= :minRating
+              ORDER BY rating DESC";
+      $stmt = $this->db->prepare($sql);
+      $stmt->execute([':lang' => $lang, ':q' => "%{$q}%", ':difficulty' => $difficulty, ':minRating' => $minRating]);
+      return $stmt->fetchAll();
   }
 }
