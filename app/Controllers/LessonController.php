@@ -33,19 +33,6 @@ class LessonController extends BaseController
     ]);
   }
 
-  // public function startLesson(): void
-  // {
-  //   if (session_status() === PHP_SESSION_NONE)
-  //     session_start();
-  //   if (empty($_SESSION['user_id']))
-  //     $this->redirect('/');
-  //   $lid = (int) ($_POST['lesson_id'] ?? 0);
-  //   $wpm = (int) ($_POST['wpm'] ?? 0);
-  //   $acc = (float) ($_POST['accuracy'] ?? 0);
-  //   (new \App\Models\Stats())->create($_SESSION['user_id'], $lid, $wpm, $acc);
-  //   $this->redirect('/stats');
-  // }
-
   public function search(): void
   {
     // Отключаем HTML-ошибки, отдаем только JSON

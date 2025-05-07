@@ -21,6 +21,7 @@
       <a href="/lessons">Уроки</a>
       <a href="/stats">Статистика</a>
       <a href="/blind-test">Сліпий друк</a>
+      <a href="/profile">Профіль</a>
       <?php
       $userModel = new \App\Models\User();
       if ($userModel->isAdmin((int) $_SESSION['user_id'])):
