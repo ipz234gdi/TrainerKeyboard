@@ -97,7 +97,9 @@ class AdminController extends BaseController
                 'content' => trim($_POST['content'] ?? ''),
                 'lang' => ($_POST['lang'] === 'en' ? 'en' : 'ua'),
                 'category_id' => (int) ($_POST['category_id'] ?? 0),
-                'tags' => trim($_POST['tags'] ?? '')
+                'tags' => trim($_POST['tags'] ?? ''),
+                'difficulty' => $_POST['difficulty'] ?? 'medium',  // Додаємо difficulty
+                'rating' => $_POST['rating'] ?? 0  // Додаємо rating
             ];
 
             if (!$data['title'] || !$data['content']) {

@@ -98,30 +98,18 @@ class LessonController extends BaseController
   // Оновлення уроку
   public function update(): void
   {
-    $data = [
-      'id' => (int) $_POST['id'],
-      'title' => trim($_POST['title']),
-      'content' => trim($_POST['content']),
-      'category_id' => (int) $_POST['category_id'],
-      'lang' => $_POST['lang'] ?? 'ua',
-      'tags' => trim($_POST['tags'] ?? '')
-    ];
-
-    $this->lessonModel->update($data);
-    $this->redirect('/lessons');
-  }
-
-  // Видалення уроку
-  public function destroy($id): void
-  {
-    $this->lessonModel->delete($id);
-    $this->redirect('/lessons');
-  }
-
-  // Показ статистики по уроках
-  public function stats($id): void
-  {
-    $lessonStats = $this->statsModel->forLesson($id);
-    $this->view('lessons/stats', ['lessonStats' => $lessonStats]);
+      $data = [
+          'id' => (int) $_POST['id'],
+          'title' => trim($_POST['title']),
+          'content' => trim($_POST['content']),
+          'category_id' => (int) $_POST['category_id'],
+          'lang' => $_POST['lang'] ?? 'ua',
+          'tags' => trim($_POST['tags'] ?? ''),
+          'difficulty' => $_POST['difficulty'] ?? 'medium',  // Додано значення за замовчуванням
+          'rating' => $_POST['rating'] ?? 0  // Додано значення за замовчуванням
+      ];
+  
+      $this->lessonModel->update($data);
+      $this->redirect('/lessons');
   }
 }

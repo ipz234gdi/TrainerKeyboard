@@ -44,7 +44,7 @@ class ProfileController extends BaseController
             'user' => $user,
             'lessonStats' => $stats,
             'lessons' => $lessons,
-            'averageStats' => $averageStats
+            'averageStats' => $averageStats,
         ]);
     }
 }

@@ -23,43 +23,55 @@
   </label>
 </form>
 
-<!-- 4.1. Поле пошуку -->
+<!-- Поле пошуку -->
 <div class="search">
   <input id="lesson-search" type="text" placeholder="Пошук уроків..." autocomplete="off">
 </div>
 
-<!-- 4.2. Контейнер для результатів AJAX -->
+<!-- Контейнер для результатів AJAX -->
 <div id="search-results" style="display:none;">
   <h2>Результати пошуку</h2>
   <ul id="results-list"></ul>
 </div>
 
-<!-- 4.3. Початковий список уроків -->
+<!-- Початковий список уроків -->
 <div id="all-lessons">
   <table>
     <tr>
       <th>№</th>
       <th>Заголовок</th>
+      <th>Предпросмотр</th>
       <th>Рейтинг</th>
       <th>Складність</th>
+      <th>Статус</th>
       <th>Дія</th>
     </tr>
     <?php foreach ($lessons as $l): ?>
       <tr>
         <td><?= $l['id'] ?></td>
         <td><?= htmlspecialchars($l['title']) ?></td>
+        <td><?= htmlspecialchars($l['preview']) ?></td>
         <td><?= $l['rating'] ?></td>
         <td><?= $l['difficulty'] ?></td>
         <td>
+          <?php if (in_array($l['id'], $completed)): ?>
+            <span>Пройдено</span>
+          <?php else: ?>
+            <span>Не пройдено</span>
+          <?php endif; ?>
+        </td>
+        <td>
           <form method="post" action="/lessons/start">
             <input type="hidden" name="lesson_id" value="<?= $l['id'] ?>">
-            <button type="submit">Переглянути</button>
+            <button type="submit">Почати</button>
           </form>
         </td>
       </tr>
     <?php endforeach; ?>
   </table>
 </div>
+
+
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const input = document.getElementById('lesson-search');
@@ -92,7 +104,7 @@
                 <form method="post" action="/lessons/start" style="display:inline">
                   <input type="hidden" name="lesson_id" value="${item.id}">
                   <input type="hidden" name="lang" value="${item.lang}">
-                  <button type="submit">Preview</button>
+                  <button type="submit">Почати</button>
                 </form>
               `;
                 list.appendChild(li);

@@ -17,5 +17,13 @@
         </select>
     </label><br>
     <label>Tags (csv):<input name="tags"></label><br>
+    <label>Difficulty:
+        <select name="difficulty">
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+        </select>
+    </label><br>
+    <label>Rating:<input name="rating" type="number" step="0.01" min="0" max="10"></label><br>
     <button type="submit">Save</button>
 </form>

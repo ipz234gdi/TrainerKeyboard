@@ -30,33 +30,43 @@ class PageController extends BaseController
     {
         if (session_status() === PHP_SESSION_NONE)
             session_start();
+
         if (empty($_SESSION['user_id'])) {
             $this->redirect('/');
         }
 
-        // поточна мова
+        // Поточна мова
         $lang = $_GET['lang'] ?? ($_SESSION['lang'] ?? 'ua');
         $_SESSION['lang'] = in_array($lang, ['ua', 'en']) ? $lang : 'ua';
 
-        // значення складності
-        $difficulty = $_GET['difficulty'] ?? 'medium';  // ініціалізація $difficulty
+        // Значення складності (за замовчуванням "medium")
+        $difficulty = $_GET['difficulty'] ?? 'medium';
 
-        // значення мінімального рейтингу
+        // Значення мінімального рейтингу
         $minRating = (float) ($_GET['minRating'] ?? 0);
 
-        // уроки по мові з фільтрацією
+        // Отримуємо уроки по мові та фільтраціях
         $lessons = (new Lesson())->allByLangAndFilters($_SESSION['lang'], $difficulty, $minRating);
 
-        // отримати ID вже пройдених уроків
+        // Отримуємо ID вже пройдених уроків
         $stats = new Stats();
         $completed = $stats->completedLessons((int) $_SESSION['user_id']);
 
+        // Для кожного уроку перевіряємо наявність "preview" та додаємо значення, якщо його немає
+        foreach ($lessons as &$lesson) {
+            // Якщо preview відсутній, формуємо його як частину контенту
+            if (!isset($lesson['preview'])) {
+                $lesson['preview'] = isset($lesson['content']) ? substr($lesson['content'], 0, 100) . '...' : 'Немає попереднього перегляду';
+            }
+        }
+
+        // Відправляємо дані на вигляд
         $this->view('lessons', [
             'lessons' => $lessons,
             'lang' => $_SESSION['lang'],
             'completed' => $completed,
-            'minRating' => $minRating,  // передаємо значення в вигляд
-            'difficulty' => $difficulty  // передаємо значення складності
+            'minRating' => $minRating,
+            'difficulty' => $difficulty
         ]);
     }
 

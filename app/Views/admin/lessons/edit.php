@@ -20,5 +20,13 @@
         </select>
     </label><br>
     <label>Tags (csv):<input name="tags" value="<?= htmlspecialchars($lesson['tags'] ?? '') ?>"></label><br>
+    <label>Difficulty:
+        <select name="difficulty">
+            <option value="easy" <?= $lesson['difficulty'] === 'easy' ? 'selected' : '' ?>>Easy</option>
+            <option value="medium" <?= $lesson['difficulty'] === 'medium' ? 'selected' : '' ?>>Medium</option>
+            <option value="hard" <?= $lesson['difficulty'] === 'hard' ? 'selected' : '' ?>>Hard</option>
+        </select>
+    </label><br>
+    <label>Rating:<input name="rating" type="number" step="0.01" min="0" max="10" value="<?= $lesson['rating'] ?>"></label><br>
     <button type="submit">Update</button>
 </form>

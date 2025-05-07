@@ -43,6 +43,5 @@ $router->post('/admin/users/update-role', 'App\Controllers\AdminController@users
 $router->post('/admin/users/toggle-block','App\Controllers\AdminController@usersToggleBlock');
 
 $router->get('/blind-test', 'App\Controllers\BlindTestController@start');
-// $router->post('/blind-test/start', 'App\Controllers\BlindTestController@start');
 
 $router->dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);

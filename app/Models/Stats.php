@@ -10,7 +10,7 @@ class Stats
   {
     $this->db = Database::getInstance();
   }
-  
+
   // Метод для отримання завершених уроків для користувача
   public function completedLessons(int $userId): array
   {
@@ -45,10 +45,25 @@ class Stats
   public function forUser(int $userId): array
   {
     $stmt = $this->db->prepare(
-      "SELECT * FROM user_stats WHERE user_id = :user_id"
+      "SELECT s.*, l.title AS lesson_title, l.difficulty, l.rating
+         FROM stats s
+         JOIN lessons l ON s.lesson_id = l.id
+         WHERE s.user_id = :user_id"
     );
     $stmt->execute([':user_id' => $userId]);
-    return $stmt->fetch();
+    return $stmt->fetchAll(); // Повертає всі записи з цієї статистики для користувача
+  }
+
+  // Додавання методу для обчислення середніх статистик
+  public function getAverageStats(int $userId): array
+  {
+    $stmt = $this->db->prepare(
+      "SELECT AVG(wpm) AS avg_wpm, AVG(accuracy) AS avg_accuracy
+         FROM stats
+         WHERE user_id = :user_id"
+    );
+    $stmt->execute([':user_id' => $userId]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
   }
 
   // Метод для отримання статистики по всіх користувачах
