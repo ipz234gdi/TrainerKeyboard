@@ -5,53 +5,92 @@
 /** @var array $filter */
 /** @var array $lessons */
 ?>
-<h2>Фільтри</h2>
-<form method="get" action="/stats">
-  <label>Від: <input type="date" name="from" value="<?= htmlspecialchars($filter['from'] ?? '') ?>"></label>
-  <label>До:  <input type="date" name="to"   value="<?= htmlspecialchars($filter['to']   ?? '') ?>"></label>
-  <label>Урок:
-    <select name="lesson">
-      <option value="0">— усі —</option>
-      <?php foreach($lessons as $l): ?>
-        <option value="<?= $l['id'] ?>"
-           <?= $filter['lessonId']==$l['id']?'selected':'' ?>>
-          <?= htmlspecialchars($l['title']) ?>
-        </option>
-      <?php endforeach; ?>
-    </select>
-  </label>
-  <button type="submit">Застосувати</button>
-</form>
+<div class="stats-container">
+  <!-- Фільтри -->
+  <div class="filters">
+    <h2>Фільтри</h2>
+    <form method="get" action="/stats">
+      <div class="filter-item">
+        <label for="from">Від:</label>
+        <input type="date" name="from" id="from" value="<?= htmlspecialchars($filter['from'] ?? '') ?>">
+      </div>
+      <div class="filter-item">
+        <label for="to">До:</label>
+        <input type="date" name="to" id="to" value="<?= htmlspecialchars($filter['to'] ?? '') ?>">
+      </div>
+      <div class="filter-item">
+        <label for="lesson">Урок:</label>
+        <select name="lesson" id="lesson">
+          <option value="0">— усі —</option>
+          <?php foreach($lessons as $l): ?>
+            <option value="<?= $l['id'] ?>" <?= $filter['lessonId']==$l['id'] ? 'selected' : '' ?>>
+              <?= htmlspecialchars($l['title']) ?>
+            </option>
+          <?php endforeach; ?>
+        </select>
+      </div>
+      <button type="submit" class="btn-apply">Застосувати</button>
+    </form>
+  </div>
 
-<h2>Ваш графік WPM</h2>
-<canvas id="wpmChart" width="600" height="300"></canvas>
+  <!-- Графік WPM -->
+  <div class="chart-container">
+    <h2>Ваш графік WPM</h2>
+    <canvas id="wpmChart" width="600" height="300"></canvas>
+  </div>
 
-<h2>Ваша статистика</h2>
-<table>
-  <tr><th>Урок</th><th>WPM</th><th>Точність</th><th>Дата</th></tr>
-  <?php foreach ($userStats as $r): ?>
-    <tr>
-      <td><?= htmlspecialchars($r['title']) ?></td>
-      <td><?= $r['wpm'] ?></td>
-      <td><?= $r['accuracy'] ?>%</td>
-      <td><?= $r['created_at'] ?></td>
-    </tr>
-  <?php endforeach; ?>
-</table>
+  <!-- Статистика користувача -->
+  <div class="user-stats">
+    <h2>Ваша статистика</h2>
+    <table class="stats-table">
+      <thead>
+        <tr>
+          <th>Урок</th>
+          <th>WPM</th>
+          <th>Точність</th>
+          <th>Дата</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach ($userStats as $r): ?>
+          <tr>
+            <td><?= htmlspecialchars($r['title']) ?></td>
+            <td><?= $r['wpm'] ?></td>
+            <td><?= $r['accuracy'] ?>%</td>
+            <td><?= $r['created_at'] ?></td>
+          </tr>
+        <?php endforeach; ?>
+      </tbody>
+    </table>
+  </div>
 
-<h2>Статистика всіх користувачів</h2>
-<table>
-  <tr><th>Користувач</th><th>Урок</th><th>WPM</th><th>Точність</th><th>Дата</th></tr>
-  <?php foreach ($allStats as $r): ?>
-    <tr>
-      <td><?= htmlspecialchars($r['username']) ?></td>
-      <td><?= htmlspecialchars($r['title']) ?></td>
-      <td><?= $r['wpm'] ?></td>
-      <td><?= $r['accuracy'] ?>%</td>
-      <td><?= $r['created_at'] ?></td>
-    </tr>
-  <?php endforeach; ?>
-</table>
+  <!-- Статистика всіх користувачів -->
+  <div class="all-users-stats">
+    <h2>Статистика всіх користувачів</h2>
+    <table class="stats-table">
+      <thead>
+        <tr>
+          <th>Користувач</th>
+          <th>Урок</th>
+          <th>WPM</th>
+          <th>Точність</th>
+          <th>Дата</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach ($allStats as $r): ?>
+          <tr>
+            <td><?= htmlspecialchars($r['username']) ?></td>
+            <td><?= htmlspecialchars($r['title']) ?></td>
+            <td><?= $r['wpm'] ?></td>
+            <td><?= $r['accuracy'] ?>%</td>
+            <td><?= $r['created_at'] ?></td>
+          </tr>
+        <?php endforeach; ?>
+      </tbody>
+    </table>
+  </div>
+</div>
 
 <!-- Chart.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

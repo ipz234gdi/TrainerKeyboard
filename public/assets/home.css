@@ -1,48 +1,246 @@
-.card {
-    margin-bottom: 20px;
-    padding: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+/* Загальні стилі для контейнера */
+.container {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f6f9;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
 }
 
+.main-content {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Стилі для картки */
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* Стилі для статистики */
 .stats {
     display: flex;
     justify-content: space-around;
-    margin-bottom: 15px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.stat-box {
+    background-color: #007BFF;
+    color: white;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    flex-grow: 1;
+    margin: 0 10px;
 }
 
 .stat-box h3 {
-    margin: 0 0 5px;
-    font-size: 1em;
-}
-
-.typing-area {
-    margin-bottom: 15px;
-}
-
-#text-display {
     font-size: 1.2em;
-    margin-bottom: 10px;
-    white-space: pre-wrap;
-    word-wrap: break-word;
+}
+
+.stat-box p {
+    font-size: 1.5em;
+}
+
+/* Стилі для введення тексту */
+.typing-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
 }
 
 #input-area {
     width: 100%;
-    padding: 8px;
-    font-size: 1em;
-    box-sizing: border-box;
+    padding: 15px;
+    font-size: 1.5em;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    transition: border 0.3s ease;
+    text-align: center;
+    margin-top: 20px;
 }
 
+#input-area:focus {
+    border-color: #007BFF;
+}
+
+.difficulty-picker select,
+#reset-btn {
+    padding: 10px 20px;
+    font-size: 1.1em;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.difficulty-picker select:focus,
+#reset-btn:focus {
+    border-color: #007BFF;
+}
+
+#reset-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+#reset-btn:hover {
+    background-color: #218838;
+}
+
+/* Стилі для клавіатури */
 #keyboard {
-    user-select: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .key-row {
     display: flex;
     justify-content: center;
-    margin-bottom: 5px;
+    flex-wrap: nowrap;
+    margin: 10px 0;
 }
+
+.key {
+    padding: 15px;
+    margin: 5px;
+    font-size: 1.5em;
+    background-color: #f1f1f1;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.key:hover {
+    background-color: #007BFF;
+    color: white;
+    transform: scale(1.1);
+}
+
+.key:active {
+    background-color: #0056b3;
+    transform: scale(0.95);
+}
+
+/* Розширені клавіші */
+.key.wide {
+    flex-basis: 8%;
+    font-size: 1.2em;
+    padding: 15px;
+}
+
+.key.extra-wide {
+    flex-basis: 12%;
+    font-size: 1.2em;
+    padding: 15px;
+}
+
+/* Клавіатура в рядках */
+.key-row {
+    justify-content: center;
+    margin: 10px 0;
+}
+
+/* Стилі для перемикача клавіатури */
+.switch {
+    display: flex;
+    align-items: center;
+}
+
+.switch input {
+    display: none;
+}
+
+.switch .slider {
+    width: 34px;
+    height: 20px;
+    background-color: #ccc;
+    border-radius: 34px;
+    position: relative;
+    transition: 0.4s;
+}
+
+.switch input:checked + .slider {
+    background-color: #28a745;
+}
+
+.switch .slider:before {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: white;
+    transition: 0.4s;
+    left: 4px;
+    top: 2px;
+}
+
+.switch input:checked + .slider:before {
+    transform: translateX(14px);
+}
+
+/* Стилі для тексту */
+#text-display {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    padding: 20px;
+    border: 2px solid #007BFF;
+    border-radius: 8px;
+    text-align: center;
+    width: 100%;
+}
+
+/* Адаптивність для мобільних пристроїв */
+@media (max-width: 768px) {
+    .stats {
+        flex-direction: column;
+    }
+
+    .stat-box {
+        margin-bottom: 20px;
+        width: 100%;
+    }
+
+    #keyboard {
+        margin-top: 30px;
+    }
+
+    .key-row {
+        flex-direction: column;
+    }
+
+    .key {
+        margin: 5px;
+        padding: 12px;
+    }
+
+    .key.wide,
+    .key.extra-wide {
+        font-size: 1.3em;
+    }
+
+    .btn-submit,
+    .difficulty-picker select,
+    #reset-btn {
+        width: 100%;
+    }
+}
+
 
 #keyboard span {
     display: inline-block;

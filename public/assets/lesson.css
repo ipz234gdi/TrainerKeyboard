@@ -78,7 +78,7 @@ header h1 {
 
 .stat-box h3 {
     margin: 0;
-    color: var(--primary-color);
+    color: white;
     font-size: 1rem;
 }
 
@@ -161,7 +161,7 @@ header h1 {
 #keyboard span.wide {
     width: auto;
     min-width: 60px;
-    padding: 0 10px;
+    /* padding: 0 10px; */
 }
 
 #keyboard span.extra-wide {
