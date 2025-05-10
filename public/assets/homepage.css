@@ -1,0 +1,64 @@
+/* Загальні стилі для навігаційного меню */
+.navbar {
+    background-color: #007BFF;
+    padding: 15px 30px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-brand {
+    font-size: 1.8em;
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.navbar-links {
+    display: flex;
+    gap: 20px;
+}
+
+.navbar-link {
+    color: #fff;
+    font-size: 1.1em;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.navbar-link:hover {
+    background-color: #0056b3;
+}
+
+.navbar-link.logout {
+    background-color: #dc3545;
+    padding: 8px 16px;
+}
+
+.navbar-link.logout:hover {
+    background-color: #c82333;
+}
+
+/* Адаптивність для мобільних пристроїв */
+@media (max-width: 768px) {
+    .navbar-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .navbar-links {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .navbar-link {
+        font-size: 1.2em;
+        padding: 12px 20px;
+    }
+}

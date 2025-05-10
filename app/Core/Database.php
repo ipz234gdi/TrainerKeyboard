@@ -3,10 +3,14 @@ namespace App\Core;
 use PDO;
 use PDOException;
 
-class Database {
+class Database
+{
   private static ?PDO $instance = null;
-  private function __construct() {}
-  public static function getInstance(): PDO {
+  private function __construct()
+  {
+  }
+  public static function getInstance(): PDO
+  {
     if (!self::$instance) {
       $env = $_ENV;
       $dsn = "{$env['DB_DRIVER']}:host={$env['DB_HOST']};port={$env['DB_PORT']};dbname={$env['DB_DATABASE']};charset=utf8";
