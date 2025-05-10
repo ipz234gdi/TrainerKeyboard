@@ -45,9 +45,14 @@ class LessonController extends BaseController
     $difficulty = $_GET['difficulty'] ?? 'medium';
     $minRating = (float) ($_GET['minRating'] ?? 0);
 
+    // Отримуємо результати пошуку
     $results = $this->lessonModel->search($q, $lang, $difficulty, $minRating);
 
-    $this->view('lessons/search', ['results' => $results]);
+    // Встановлюємо заголовок Content-Type як application/json
+    header('Content-Type: application/json');
+
+    // Повертаємо дані як JSON
+    echo json_encode($results);
   }
 
   // Виведення детальної інформації про урок
@@ -98,18 +103,18 @@ class LessonController extends BaseController
   // Оновлення уроку
   public function update(): void
   {
-      $data = [
-          'id' => (int) $_POST['id'],
-          'title' => trim($_POST['title']),
-          'content' => trim($_POST['content']),
-          'category_id' => (int) $_POST['category_id'],
-          'lang' => $_POST['lang'] ?? 'ua',
-          'tags' => trim($_POST['tags'] ?? ''),
-          'difficulty' => $_POST['difficulty'] ?? 'medium',  // Додано значення за замовчуванням
-          'rating' => $_POST['rating'] ?? 0  // Додано значення за замовчуванням
-      ];
-  
-      $this->lessonModel->update($data);
-      $this->redirect('/lessons');
+    $data = [
+      'id' => (int) $_POST['id'],
+      'title' => trim($_POST['title']),
+      'content' => trim($_POST['content']),
+      'category_id' => (int) $_POST['category_id'],
+      'lang' => $_POST['lang'] ?? 'ua',
+      'tags' => trim($_POST['tags'] ?? ''),
+      'difficulty' => $_POST['difficulty'] ?? 'medium',  // Додано значення за замовчуванням
+      'rating' => $_POST['rating'] ?? 0  // Додано значення за замовчуванням
+    ];
+
+    $this->lessonModel->update($data);
+    $this->redirect('/lessons');
   }
 }

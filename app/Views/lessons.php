@@ -4,6 +4,7 @@
 <form method="get" action="/lessons">
   <label>Мова:
     <select name="lang" onchange="this.form.submit()">
+      <option value="all" <?= $lang === 'all' ? 'selected' : '' ?>>— усі —</option>
       <option value="ua" <?= $lang === 'ua' ? 'selected' : '' ?>>Українська</option>
       <option value="en" <?= $lang === 'en' ? 'selected' : '' ?>>English</option>
     </select>
@@ -11,6 +12,7 @@
 
   <label>Складність:
     <select name="difficulty" onchange="this.form.submit()">
+      <option value="all" <?= $difficulty === 'all' ? 'selected' : '' ?>>— усі —</option>
       <option value="easy" <?= $difficulty === 'easy' ? 'selected' : '' ?>>Легкий</option>
       <option value="medium" <?= $difficulty === 'medium' ? 'selected' : '' ?>>Середній</option>
       <option value="hard" <?= $difficulty === 'hard' ? 'selected' : '' ?>>Важкий</option>
@@ -18,11 +20,10 @@
   </label>
 
   <label>Рейтинг від:
-    <input type="number" name="minRating" value="<?= htmlspecialchars($minRating) ?>" min="0" max="5" step="0.1"
+    <input type="number" name="minRating" value="<?= htmlspecialchars($minRating) ?>" min="0" max="10" step="1"
       onchange="this.form.submit()">
   </label>
 </form>
-
 <!-- Поле пошуку -->
 <div class="search">
   <input id="lesson-search" type="text" placeholder="Пошук уроків..." autocomplete="off">
@@ -90,8 +91,14 @@
           return;
         }
         fetch(`/lessons/search?query=${encodeURIComponent(q)}`)
-          .then(res => res.json())
+          .then(res => {
+            if (!res.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return res.json(); // Переконуємось, що відповідь JSON
+          })
           .then(data => {
+            console.log(data);
             list.innerHTML = '';
             if (data.length === 0) {
               list.innerHTML = '<li>Нічого не знайдено</li>';
@@ -113,8 +120,13 @@
             allLessons.style.display = 'none';
             resultsDiv.style.display = '';
           })
-          .catch(console.error);
+          .catch(error => {
+            console.error('Error:', error);
+            resultsDiv.style.display = 'none';  // Сховати результати у разі помилки
+          });
       }, 300);
     });
   });
+
+
 </script>

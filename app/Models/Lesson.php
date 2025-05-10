@@ -13,16 +13,42 @@ class Lesson
 
   public function allByLangAndFilters(string $lang, string $difficulty, float $minRating): array
   {
+    // Формуємо частину WHERE умови для мови та складності
+    $whereClauses = [];
+    $params = ['minRating' => $minRating];
+
+    // Додаємо фільтрацію по мові, якщо вона не "усі"
+    if ($lang !== 'all') {
+      $whereClauses[] = 'l.lang = :lang';
+      $params['lang'] = $lang;
+    }
+
+    // Додаємо фільтрацію по складності, якщо вона не "усі"
+    if ($difficulty !== 'all') {
+      $whereClauses[] = 'l.difficulty = :difficulty';
+      $params['difficulty'] = $difficulty;
+    }
+
+    // Додаємо фільтрацію по рейтингу
+    $whereClauses[] = 'l.rating >= :minRating';
+
+    // Створюємо умову WHERE на основі наявних фільтрів
+    $where = $whereClauses ? 'WHERE ' . implode(' AND ', $whereClauses) : '';
+
+    // Формуємо SQL-запит
     $stmt = $this->db->prepare(
       "SELECT l.*, c.name AS category
-            FROM lessons l
-            LEFT JOIN categories c ON l.category_id = c.id
-            WHERE l.lang = :lang AND l.difficulty = :difficulty AND l.rating >= :minRating
-            ORDER BY l.rating DESC"
+        FROM lessons l
+        LEFT JOIN categories c ON l.category_id = c.id
+        $where
+        ORDER BY l.rating DESC"
     );
-    $stmt->execute([':lang' => $lang, ':difficulty' => $difficulty, ':minRating' => $minRating]);
+
+    // Виконання запиту
+    $stmt->execute($params);
     return $stmt->fetchAll();
   }
+
 
   public function all(): array
   {
@@ -99,16 +125,32 @@ class Lesson
 
   public function search(string $q, string $lang, string $difficulty, float $minRating): array
   {
+    // Формуємо SQL-запит
     $sql = "SELECT id, title, LEFT(content, 200) AS preview, lang
-              FROM lessons
-              WHERE lang = :lang
-                AND (title LIKE :q OR content LIKE :q)
-                AND difficulty = :difficulty
-                AND rating >= :minRating
-              ORDER BY rating DESC";
+            FROM lessons
+            WHERE lang = :lang
+              AND (title LIKE :q OR content LIKE :q)
+              AND difficulty = :difficulty
+              AND rating >= :minRating
+            ORDER BY rating DESC";
+
+    // Перевірка: виведемо значення, які передаються в запит
+    // echo "SQL Query: $sql<br>";
+    // echo "Params: lang=$lang, q=$q, difficulty=$difficulty, minRating=$minRating<br>";
+
     $stmt = $this->db->prepare($sql);
-    $stmt->execute([':lang' => $lang, ':q' => "%{$q}%", ':difficulty' => $difficulty, ':minRating' => $minRating]);
-    return $stmt->fetchAll();
+    $stmt->execute([
+      ':lang' => $lang,
+      ':q' => "%{$q}%",
+      ':difficulty' => $difficulty,
+      ':minRating' => $minRating
+    ]);
+
+    // Перевіримо, скільки записів повертається
+    $results = $stmt->fetchAll();
+    // echo "Results count: " . count($results) . "<br>"; // Додано для перевірки
+
+    return $results;
   }
 
   public function updateLessonRating(int $lessonId): void

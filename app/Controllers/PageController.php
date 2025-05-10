@@ -37,7 +37,7 @@ class PageController extends BaseController
 
         // Поточна мова
         $lang = $_GET['lang'] ?? ($_SESSION['lang'] ?? 'ua');
-        $_SESSION['lang'] = in_array($lang, ['ua', 'en']) ? $lang : 'ua';
+        $_SESSION['lang'] = in_array($lang, ['ua', 'en', 'all']) ? $lang : 'ua';
 
         // Значення складності (за замовчуванням "medium")
         $difficulty = $_GET['difficulty'] ?? 'medium';
@@ -46,7 +46,7 @@ class PageController extends BaseController
         $minRating = (float) ($_GET['minRating'] ?? 0);
 
         // Отримуємо уроки по мові та фільтраціях
-        $lessons = (new Lesson())->allByLangAndFilters($_SESSION['lang'], $difficulty, $minRating);
+        $lessons = (new Lesson())->allByLangAndFilters($lang, $difficulty, $minRating);
 
         // Отримуємо ID вже пройдених уроків
         $stats = new Stats();
@@ -76,6 +76,7 @@ class PageController extends BaseController
             'difficulty' => $difficulty
         ]);
     }
+
 
     public function startLesson(): void
     {

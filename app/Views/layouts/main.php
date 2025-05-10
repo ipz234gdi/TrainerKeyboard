@@ -14,9 +14,12 @@
   <link rel="stylesheet" href="/assets/profile.css">
   <link rel="stylesheet" href="/assets/stats.css">
   <link rel="stylesheet" href="/assets/create-l.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
 
 <body>
+
   <?php
   if (session_status() === PHP_SESSION_NONE) {
     session_start();

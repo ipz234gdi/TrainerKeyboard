@@ -12,18 +12,19 @@
     <form method="get" action="/stats">
       <div class="filter-item">
         <label for="from">Від:</label>
-        <input type="date" name="from" id="from" value="<?= htmlspecialchars($filter['from'] ?? '') ?>">
+        <input type="text" name="from" id="from" value="<?= htmlspecialchars($filter['from'] ?? '') ?>"
+          class="date-picker">
       </div>
       <div class="filter-item">
         <label for="to">До:</label>
-        <input type="date" name="to" id="to" value="<?= htmlspecialchars($filter['to'] ?? '') ?>">
+        <input type="text" name="to" id="to" value="<?= htmlspecialchars($filter['to'] ?? '') ?>" class="date-picker">
       </div>
       <div class="filter-item">
         <label for="lesson">Урок:</label>
         <select name="lesson" id="lesson">
           <option value="0">— усі —</option>
-          <?php foreach($lessons as $l): ?>
-            <option value="<?= $l['id'] ?>" <?= $filter['lessonId']==$l['id'] ? 'selected' : '' ?>>
+          <?php foreach ($lessons as $l): ?>
+            <option value="<?= $l['id'] ?>" <?= $filter['lessonId'] == $l['id'] ? 'selected' : '' ?>>
               <?= htmlspecialchars($l['title']) ?>
             </option>
           <?php endforeach; ?>
@@ -95,24 +96,35 @@
 <!-- Chart.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-const ctx = document.getElementById('wpmChart').getContext('2d');
-const data = <?= json_encode($chartData, JSON_HEX_TAG) ?>;
-new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels: data.map(d => d.date),
-    datasets: [{
-      label: 'WPM',
-      data: data.map(d => d.wpm),
-      fill: false,
-      tension: 0.1
-    }]
-  },
-  options: {
-    scales: {
-      x: { title: { display: true, text: 'Дата' } },
-      y: { title: { display: true, text: 'WPM' }, beginAtZero: true }
+  const ctx = document.getElementById('wpmChart').getContext('2d');
+  const data = <?= json_encode($chartData, JSON_HEX_TAG) ?>;
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: data.map(d => d.date),
+      datasets: [{
+        label: 'WPM',
+        data: data.map(d => d.wpm),
+        fill: false,
+        tension: 0.1
+      }]
+    },
+    options: {
+      scales: {
+        x: { title: { display: true, text: 'Дата' } },
+        y: { title: { display: true, text: 'WPM' }, beginAtZero: true }
+      }
     }
-  }
-});
+  });
+
+
+
+  // Ініціалізація flatpickr для вибору діапазону дат
+  flatpickr(".date-picker", {
+    dateFormat: "Y-m-d",
+    // mode: "range",
+    allowInput: true,
+    onChange: function (selectedDates, dateStr, instance) {
+    }
+  });
 </script>
