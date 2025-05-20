@@ -2,154 +2,152 @@
 namespace App\Controllers;
 
 use App\Core\BaseController;
-use App\Models\User;
-use App\Models\Lesson;
-use App\Models\Stats;
-use App\Models\Category;
+use App\Models\{User, Lesson, Stats, Category};
 use Exception;
 
 class AdminController extends BaseController
 {
-    private User $userModel;
-    private Lesson $lessonModel;
-    private Stats $statsModel;
-    private Category $categoryModel;
+    private array $models = [];
 
     public function __construct()
     {
-        // Перевірка прав доступу, щоб цей контролер міг використовувати лише адмін
         $this->ensureAdmin();
-        // Ініціалізація моделей для роботи з базою даних
-        $this->userModel = new User();
-        $this->lessonModel = new Lesson();
-        $this->statsModel = new Stats();
-        $this->categoryModel = new Category();
+        $this->models = [
+            'user' => new User(),
+            'lesson' => new Lesson(),
+            'stats' => new Stats(),
+            'category' => new Category()
+        ];
     }
 
-    // Управління уроками
+    /* Lesson Management */
     public function lessonsIndex(): void
     {
-        // Завантажуємо всі уроки та категорії
-        $lessons = $this->lessonModel->all();
-        $categories = $this->categoryModel->all();
-
-        $this->view('admin/lessons/index', [
-            'lessons' => $lessons,
-            'categories' => $categories
+        $this->renderLessonView('index', [
+            'lessons' => $this->models['lesson']->all()
         ]);
     }
 
-    // Форма для створення уроків
     public function lessonsCreateForm(): void
     {
-        // Завантажуємо категорії
-        $categories = $this->categoryModel->all();
-        $this->view('admin/lessons/create', ['categories' => $categories]);
+        $this->renderLessonView('create');
     }
 
-    // Додавання уроку
     public function lessonsStore(): void
     {
-        try {
-            // Перевірка отриманих даних
-            $data = [
-                'title' => trim($_POST['title'] ?? ''),
-                'content' => trim($_POST['content'] ?? ''),
-                'lang' => ($_POST['lang'] === 'en' ? 'en' : 'ua'),
-                'category_id' => (int) ($_POST['category_id'] ?? 0),
-                'tags' => trim($_POST['tags'] ?? '')
-            ];
-
-            if (!$data['title'] || !$data['content']) {
-                throw new Exception('Не всі поля заповнені.');
-            }
-
-            // Створення нового уроку
-            $this->lessonModel->create($data);
-            $this->redirect('/admin/lessons');
-        } catch (Exception $e) {
-            // Логування помилок
-            error_log($e->getMessage());
-            $this->view('admin/lessons/create', ['error' => 'Сталася помилка. Спробуйте ще раз.']);
-        }
+        $this->processLessonRequest('create');
     }
 
-    // Редагування уроку
     public function lessonsEditForm(): void
     {
-        $id = (int) ($_GET['id'] ?? 0);
-        $lesson = $this->lessonModel->getById($id);
-        $categories = $this->categoryModel->all();
-        $this->view('admin/lessons/edit', [
-            'lesson' => $lesson,
-            'categories' => $categories
+        $this->renderLessonView('edit', [
+            'lesson' => $this->getLessonById()
         ]);
     }
 
-    // Оновлення уроку
     public function lessonsUpdate(): void
     {
-        try {
-            $id = (int) ($_POST['id'] ?? 0);
-            $data = [
-                'id' => $id,
-                'title' => trim($_POST['title'] ?? ''),
-                'content' => trim($_POST['content'] ?? ''),
-                'lang' => ($_POST['lang'] === 'en' ? 'en' : 'ua'),
-                'category_id' => (int) ($_POST['category_id'] ?? 0),
-                'tags' => trim($_POST['tags'] ?? ''),
-                'difficulty' => $_POST['difficulty'] ?? 'medium',  // Додаємо difficulty
-                'rating' => $_POST['rating'] ?? 0  // Додаємо rating
-            ];
-
-            if (!$data['title'] || !$data['content']) {
-                throw new Exception('Не всі поля заповнені.');
-            }
-
-            // Оновлення уроку
-            $this->lessonModel->update($data);
-            $this->redirect('/admin/lessons');
-        } catch (Exception $e) {
-            error_log($e->getMessage());
-            $this->view('admin/lessons/edit', ['error' => 'Сталася помилка. Спробуйте ще раз.']);
-        }
+        $this->processLessonRequest('update');
     }
 
-    // Видалення уроку
     public function lessonsDestroy(): void
     {
         try {
-            $id = (int) ($_POST['id'] ?? 0);
-            $this->lessonModel->delete($id);
+            $this->models['lesson']->delete($this->getId());
             $this->redirect('/admin/lessons');
         } catch (Exception $e) {
-            error_log($e->getMessage());
-            $this->view('admin/lessons/index', ['error' => 'Не вдалося видалити урок.']);
+            $this->handleError($e, 'lessons/index');
         }
     }
 
-    // Управління користувачами
+    /* User Management */
     public function usersIndex(): void
     {
-        $users = $this->userModel->all();
-        $this->view('admin/users/index', ['users' => $users]);
+        $this->view('admin/users/index', [
+            'users' => $this->models['user']->all()
+        ]);
     }
 
-    // Оновлення ролі користувача
     public function usersUpdateRole(): void
     {
-        $id = (int) ($_POST['id'] ?? 0);
-        $role = $_POST['role'] ?? 'student';
-        $this->userModel->updateRole($id, $role);
+        $this->models['user']->updateRole(
+            $this->getId(),
+            $_POST['role'] ?? 'student'
+        );
         $this->redirect('/admin/users');
     }
 
-    // Блокування/розблокування користувача
     public function usersToggleBlock(): void
     {
-        $id = (int) ($_POST['id'] ?? 0);
-        $current = (int) ($_POST['blocked'] ?? 0);
-        $this->userModel->setBlocked($id, !$current);
+        $this->models['user']->setBlocked(
+            $this->getId(),
+            !((int) ($_POST['blocked'] ?? 0))
+        );
         $this->redirect('/admin/users');
+    }
+
+    /* Core Private Methods */
+    private function processLessonRequest(string $action): void
+    {
+        try {
+            $data = $this->getValidatedLessonData();
+            
+            $action === 'create' 
+                ? $this->models['lesson']->create($data)
+                : $this->models['lesson']->update($data);
+                
+            $this->redirect('/admin/lessons');
+        } catch (Exception $e) {
+            $this->handleError($e, 'lessons/' . ($action === 'create' ? 'create' : 'edit'), $data ?? []);
+        }
+    }
+
+    private function getValidatedLessonData(): array
+    {
+        $data = [
+            'title' => trim($_POST['title'] ?? ''),
+            'content' => trim($_POST['content'] ?? ''),
+            'lang' => $_POST['lang'] === 'en' ? 'en' : 'ua',
+            'category_id' => (int) ($_POST['category_id'] ?? 0),
+            'tags' => trim($_POST['tags'] ?? ''),
+            'difficulty' => $_POST['difficulty'] ?? 'medium',
+            'rating' => $_POST['rating'] ?? 0
+        ];
+
+        if (isset($_POST['id'])) {
+            $data['id'] = $this->getId();
+        }
+
+        if (empty($data['title']) || empty($data['content'])) {
+            throw new Exception('Required fields are missing');
+        }
+
+        return $data;
+    }
+
+    private function renderLessonView(string $view, array $data = []): void
+    {
+        $this->view("admin/lessons/$view", array_merge($data, [
+            'categories' => $this->models['category']->all()
+        ]));
+    }
+
+    private function getLessonById(): object
+    {
+        return $this->models['lesson']->getById($this->getId());
+    }
+
+    private function getId(): int
+    {
+        return (int) ($_REQUEST['id'] ?? 0);
+    }
+
+    private function handleError(Exception $e, string $view, array $data = []): void
+    {
+        error_log($e->getMessage());
+        $this->view("admin/$view", array_merge($data, [
+            'error' => 'Operation failed. Please try again.',
+            'categories' => $this->models['category']->all()
+        ]));
     }
 }
