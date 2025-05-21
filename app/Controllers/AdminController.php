@@ -3,6 +3,7 @@ namespace App\Controllers;
 
 use App\Core\BaseController;
 use App\Models\{User, Lesson, Stats, Category};
+use App\Core\Middleware\AdminMiddleware;
 use Exception;
 
 class AdminController extends BaseController
@@ -11,7 +12,8 @@ class AdminController extends BaseController
 
     public function __construct()
     {
-        $this->ensureAdmin();
+        parent::__construct();
+        $this->addMiddleware(new AdminMiddleware($this));
         $this->models = [
             'user' => new User(),
             'lesson' => new Lesson(),
@@ -23,67 +25,85 @@ class AdminController extends BaseController
     /* Lesson Management */
     public function lessonsIndex(): void
     {
-        $this->renderLessonView('index', [
-            'lessons' => $this->models['lesson']->all()
-        ]);
+        $this->executeAction(function() {
+            $this->renderLessonView('index', [
+                'lessons' => $this->models['lesson']->all()
+            ]);
+        });
     }
 
     public function lessonsCreateForm(): void
     {
-        $this->renderLessonView('create');
+        $this->executeAction(function() {
+            $this->renderLessonView('create');
+        });
     }
 
     public function lessonsStore(): void
     {
-        $this->processLessonRequest('create');
+        $this->executeAction(function() {
+            $this->processLessonRequest('create');
+        });
     }
 
     public function lessonsEditForm(): void
     {
-        $this->renderLessonView('edit', [
-            'lesson' => $this->getLessonById()
-        ]);
+        $this->executeAction(function() {
+            $this->renderLessonView('edit', [
+                'lesson' => $this->getLessonById()
+            ]);
+        });
     }
 
     public function lessonsUpdate(): void
     {
-        $this->processLessonRequest('update');
+        $this->executeAction(function() {
+            $this->processLessonRequest('update');
+        });
     }
 
     public function lessonsDestroy(): void
     {
-        try {
-            $this->models['lesson']->delete($this->getId());
-            $this->redirect('/admin/lessons');
-        } catch (Exception $e) {
-            $this->handleError($e, 'lessons/index');
-        }
+        $this->executeAction(function() {
+            try {
+                $this->models['lesson']->delete($this->getId());
+                $this->redirect('/admin/lessons');
+            } catch (Exception $e) {
+                $this->handleError($e, 'lessons/index');
+            }
+        });
     }
 
     /* User Management */
     public function usersIndex(): void
     {
-        $this->view('admin/users/index', [
-            'users' => $this->models['user']->all()
-        ]);
+        $this->executeAction(function() {
+            $this->view('admin/users/index', [
+                'users' => $this->models['user']->all()
+            ]);
+        });
     }
 
     public function usersUpdateRole(): void
     {
-        $this->models['user']->updateRole(
-            $this->getId(),
-            $_POST['role'] ?? 'student'
-        );
-        $this->redirect('/admin/users');
+        $this->executeAction(function() {
+            $this->models['user']->updateRole(
+                $this->getId(),
+                $_POST['role'] ?? 'student'
+            );
+            $this->redirect('/admin/users');
+        });
     }
 
     public function usersToggleBlock(): void
     {
-        $this->models['user']->setBlocked(
-            $this->getId(),
-            !((int) ($_POST['blocked'] ?? 0))
-        );
-        $this->redirect('/admin/users');
+        $this->executeAction(function() {
+            $this->models['user']->setBlocked(
+                $this->getId(),
+                !((int) ($_POST['blocked'] ?? 0))
+            );
+            $this->redirect('/admin/users');
+        });
     }
 
     /* Core Private Methods */
