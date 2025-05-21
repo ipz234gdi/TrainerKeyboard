@@ -1,8 +1,52 @@
 <?php
 namespace App\Core;
 
+use App\Core\Middleware\MiddlewareStack;
+use App\Core\Middleware\MiddlewareInterface;
+
 abstract class BaseController
 {
+  /**
+   * @var MiddlewareStack
+   */
+  protected MiddlewareStack $middleware;
+
+  public function __construct()
+  {
+    $this->middleware = new MiddlewareStack();
+  }
+
+  /**
+   * Add middleware to the stack
+   *
+   * @param MiddlewareInterface $middleware
+   * @return $this
+   */
+  protected function addMiddleware(MiddlewareInterface $middleware): self
+  {
+    $this->middleware->add($middleware);
+    return $this;
+  }
+
+  /**
+   * Execute an action with middleware
+   *
+   * @param callable $action
+   * @param array $request
+   * @return mixed
+   */
+  protected function executeAction(callable $action, array $request = [])
+  {
+    return $this->middleware->process($request, $action);
+  }
+
+  /**
+   * Render a view
+   *
+   * @param string $view
+   * @param array $data
+   * @return void
+   */
   protected function view(string $view, array $data = []): void
   {
     extract($data);
@@ -10,12 +54,23 @@ abstract class BaseController
     require __DIR__ . '/../Views/layouts/main.php';
   }
 
-  protected function redirect(string $to): void
+  /**
+   * Redirect to another URL
+   *
+   * @param string $to
+   * @return void
+   */
+  public function redirect(string $to): void
   {
     header("Location: {$to}");
     exit;
   }
 
+  /**
+   * Check if the current user is an admin
+   *
+   * @return void
+   */
   protected function ensureAdmin(): void
   {
     if (session_status() === PHP_SESSION_NONE) {
