@@ -6,11 +6,12 @@ use App\Core\BaseController;
 
 class AdminMiddleware implements MiddlewareInterface
 {
+  private ErrorHandlerInterface $errorHandler;
     /**
      * @var BaseController
      */
     private BaseController $controller;
-    
+
     /**
      * @var string
      */
@@ -20,9 +21,10 @@ class AdminMiddleware implements MiddlewareInterface
      * @param BaseController $controller
      * @param string $redirectPath
      */
-    public function __construct(BaseController $controller, string $redirectPath = '/')
+    public function __construct(BaseController $controller,ErrorHandlerInterface $errorHandler, string $redirectPath = '/')
     {
         $this->controller = $controller;
+      $this->errorHandler = $errorHandler;
         $this->redirectPath = $redirectPath;
     }
 
@@ -38,21 +40,19 @@ class AdminMiddleware implements MiddlewareInterface
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        
+
         $uid = $_SESSION['user_id'] ?? null;
-        
+
         if (!$uid) {
             $this->controller->redirect($this->redirectPath);
         }
-        
+
         $userModel = new User();
-        
-        if (!$userModel->isAdmin((int) $uid)) {
-            http_response_code(403);
-            echo "403 Forbidden — у вас немає доступу";
-            exit;
-        }
-        
+
+      if (!$userModel->isAdmin((int) $uid)) {
+        $this->errorHandler->handleForbidden(); 
+      }
+
         return $next($request);
     }
 }
