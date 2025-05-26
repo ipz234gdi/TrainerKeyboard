@@ -4,11 +4,14 @@ namespace App\Controllers;
 use App\Core\BaseController;
 use App\Models\{User, Lesson, Stats, Category};
 use App\Core\Middleware\AdminMiddleware;
+use App\Requests\LessonFormRequest; // Додано
+use App\Services\AdminLessonService; // Додано
 use Exception;
 
 class AdminController extends BaseController
 {
     private array $models = [];
+    private AdminLessonService $adminLessonService; // Додано
 
     public function __construct()
     {
@@ -20,6 +23,7 @@ class AdminController extends BaseController
             'stats' => new Stats(),
             'category' => new Category()
         ];
+        $this->adminLessonService = new AdminLessonService(); // Ініціалізація сервісу
     }
 
     /* Lesson Management */
@@ -109,41 +113,34 @@ class AdminController extends BaseController
     /* Core Private Methods */
     private function processLessonRequest(string $action): void
     {
+        $request = new LessonFormRequest();
+        $data = $request->getData(); // Отримуємо дані для збереження у випадку помилки
+
         try {
-            $data = $this->getValidatedLessonData();
-            
-            $action === 'create' 
-                ? $this->models['lesson']->create($data)
-                : $this->models['lesson']->update($data);
-                
+            if (!$request->validate()) {
+                // Якщо валідація не пройшла, кидаємо виняток з першою помилкою
+                throw new Exception($request->getFirstError());
+            }
+
+            if ($action === 'create') {
+                $this->adminLessonService->createLesson($data);
+            } else {
+                $this->adminLessonService->updateLesson($data);
+            }
+
             $this->redirect('/admin/lessons');
         } catch (Exception $e) {
-            $this->handleError($e, 'lessons/' . ($action === 'create' ? 'create' : 'edit'), $data ?? []);
+            $view = 'lessons/' . ($action === 'create' ? 'create' : 'edit');
+            // Передаємо помилки валідації та введені дані у view
+            $this->handleError($e, $view, $data, $request->getErrors());
         }
     }
 
-    private function getValidatedLessonData(): array
-    {
-        $data = [
-            'title' => trim($_POST['title'] ?? ''),
-            'content' => trim($_POST['content'] ?? ''),
-            'lang' => $_POST['lang'] === 'en' ? 'en' : 'ua',
-            'category_id' => (int) ($_POST['category_id'] ?? 0),
-            'tags' => trim($_POST['tags'] ?? ''),
-            'difficulty' => $_POST['difficulty'] ?? 'medium',
-            'rating' => $_POST['rating'] ?? 0
-        ];
-
-        if (isset($_POST['id'])) {
-            $data['id'] = $this->getId();
-        }
-
-        if (empty($data['title']) || empty($data['content'])) {
-            throw new Exception('Required fields are missing');
-        }
-
-        return $data;
-    }
+    // ВИДАЛИТИ ЦЕЙ МЕТОД: getValidatedLessonData()
+    // private function getValidatedLessonData(): array
+    // {
+    //    ... (весь вміст цього методу буде видалено)
+    // }
 
     private function renderLessonView(string $view, array $data = []): void
     {
@@ -154,6 +151,7 @@ class AdminController extends BaseController
 
     private function getLessonById(): object
     {
+        // Змінюємо отримання ID, щоб не покладатись на `getValidatedLessonData`
         return $this->models['lesson']->getById($this->getId());
     }
 
@@ -162,11 +160,15 @@ class AdminController extends BaseController
         return (int) ($_REQUEST['id'] ?? 0);
     }
 
-    private function handleError(Exception $e, string $view, array $data = []): void
+    // Оновлений handleError для підтримки помилок валідації
+    private function handleError(Exception $e, string $view, array $oldInput = [], array $validationErrors = []): void
     {
-        error_log($e->getMessage());
-        $this->view("admin/$view", array_merge($data, [
-            'error' => 'Operation failed. Please try again.',
+        error_log($e->getMessage()); // Логуємо реальну помилку
+        $errorMessage = $e->getMessage(); // Використовуємо повідомлення з винятку
+
+        $this->view("admin/$view", array_merge($oldInput, [ // Передаємо старі введені дані
+            'error' => 'Operation failed: ' . $errorMessage, // Загальне повідомлення + деталі
+            'validationErrors' => $validationErrors, // Новий параметр для помилок валідації
             'categories' => $this->models['category']->all()
         ]));
     }
