@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Май 10 2025 г., 17:31
--- Версия сервера: 9.1.0
--- Версия PHP: 8.3.14
+-- Час створення: Трв 31 2025 р., 17:07
+-- Версія сервера: 9.1.0
+-- Версія PHP: 8.3.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- База данных: `blind_trainer`
+-- База даних: `blind_trainer`
 --
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `categories`
+-- Структура таблиці `categories`
 --
 
 DROP TABLE IF EXISTS `categories`;
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `categories` (
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Дамп данных таблицы `categories`
+-- Дамп даних таблиці `categories`
 --
 
 INSERT INTO `categories` (`id`, `name`) VALUES
@@ -50,7 +50,7 @@ INSERT INTO `categories` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `lessons`
+-- Структура таблиці `lessons`
 --
 
 DROP TABLE IF EXISTS `lessons`;
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `lessons` (
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3;
 
 --
--- Дамп данных таблицы `lessons`
+-- Дамп даних таблиці `lessons`
 --
 
 INSERT INTO `lessons` (`id`, `title`, `content`, `category_id`, `tags`, `lang`, `rating`, `difficulty`) VALUES
@@ -81,7 +81,7 @@ INSERT INTO `lessons` (`id`, `title`, `content`, `category_id`, `tags`, `lang`, 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `stats`
+-- Структура таблиці `stats`
 --
 
 DROP TABLE IF EXISTS `stats`;
@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `stats` (
 ) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8mb3;
 
 --
--- Дамп данных таблицы `stats`
+-- Дамп даних таблиці `stats`
 --
 
 INSERT INTO `stats` (`id`, `user_id`, `lesson_id`, `wpm`, `accuracy`, `created_at`) VALUES
@@ -122,7 +122,7 @@ INSERT INTO `stats` (`id`, `user_id`, `lesson_id`, `wpm`, `accuracy`, `created_a
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `users`
+-- Структура таблиці `users`
 --
 
 DROP TABLE IF EXISTS `users`;
@@ -138,7 +138,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
 
 --
--- Дамп данных таблицы `users`
+-- Дамп даних таблиці `users`
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `created_at`, `role`, `blocked`) VALUES
@@ -146,17 +146,17 @@ INSERT INTO `users` (`id`, `username`, `password`, `created_at`, `role`, `blocke
 (2, 'Reiclid2', '$2y$10$ZFUDL.Z59BIAc3MFQEoLlufZ3kL9hbDe.HjgUvUjk6tAdcTxXVaBC', '2025-05-06 18:20:24', 'student', 0);
 
 --
--- Ограничения внешнего ключа сохраненных таблиц
+-- Обмеження зовнішнього ключа збережених таблиць
 --
 
 --
--- Ограничения внешнего ключа таблицы `lessons`
+-- Обмеження зовнішнього ключа таблиці `lessons`
 --
 ALTER TABLE `lessons`
   ADD CONSTRAINT `lessons_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL;
 
 --
--- Ограничения внешнего ключа таблицы `stats`
+-- Обмеження зовнішнього ключа таблиці `stats`
 --
 ALTER TABLE `stats`
   ADD CONSTRAINT `stats_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
