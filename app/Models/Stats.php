@@ -8,11 +8,23 @@ use PDO;
 class Stats
 {
   private PDO $db;
+  private static array $observers = [];
 
   public function __construct()
   {
     $this->db = Database::getInstance();
   }
+    public static function attachObserver(callable $observer): void
+    {
+        self::$observers[] = $observer;
+    }
+
+    private static function notifyObservers($event, $data): void
+    {
+        foreach (self::$observers as $observer) {
+            $observer($event, $data);
+        }
+    }
 
   // Метод для отримання завершених уроків для користувача
   public function completedLessons(int $userId): array
@@ -50,7 +62,11 @@ class Stats
     $s = $this->db->prepare(
       "INSERT INTO stats(user_id, lesson_id, wpm, accuracy) VALUES(?, ?, ?, ?)"
     );
-    return $s->execute([$uid, $lid, $wpm, $acc]);
+    $result = $s->execute([$uid, $lid, $wpm, $acc]);
+    if ($result) {
+        self::notifyObservers('stats.created', ['user_id'=>$uid, 'lesson_id'=>$lid, 'wpm'=>$wpm, 'accuracy'=>$acc]);
+    }
+    return $result;
   }
 
   // Метод для отримання статистики по конкретному уроку

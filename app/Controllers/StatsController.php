@@ -4,12 +4,14 @@ use App\Core\BaseController;
 use App\Models\Stats;
 use App\Models\Lesson;
 use App\Core\Middleware\AuthMiddleware;
+use App\Observers\LessonObserver;
 
 class StatsController extends BaseController
 {
   public function __construct()
   {
     parent::__construct();
+    Stats::attachObserver([new LessonObserver(), 'handle']);
   }
 
   public function index(): void

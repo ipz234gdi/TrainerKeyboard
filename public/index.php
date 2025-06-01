@@ -11,9 +11,6 @@ Dotenv\Dotenv::createImmutable(__DIR__ . '/../')->load();
 // Підключаємо БД
 Database::getInstance();
 
-// підключили сесію на старті
-session_start();
-
 // Маршрути
 $router = new Router();
 

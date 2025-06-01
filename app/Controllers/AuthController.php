@@ -46,7 +46,6 @@ class AuthController extends BaseController
 
     public function logout(): void
     {
-        session_start();
         session_destroy();
         $this->redirect('/');
     }
