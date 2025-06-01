@@ -20,11 +20,6 @@
 
 <body>
 
-  <?php
-  if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-  }
-  ?>
   <nav class="navbar">
     <div class="navbar-container">
       <a href="/" class="navbar-brand">Головна</a>

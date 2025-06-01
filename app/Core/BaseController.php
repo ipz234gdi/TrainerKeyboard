@@ -74,9 +74,6 @@ abstract class BaseController
    */
   protected function ensureAdmin(): void
   {
-    if (session_status() === PHP_SESSION_NONE) {
-      session_start();
-    }
     $uid = $_SESSION['user_id'] ?? null;
     if (!$uid || !\App\Models\User::class) {
       $this->redirect('/');
