@@ -14,6 +14,7 @@ abstract class BaseController
   public function __construct()
   {
     $this->middleware = new MiddlewareStack();
+      $this->addMiddleware(new \App\Core\Middleware\SessionMiddleware());
   }
 
   /**
